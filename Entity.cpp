@@ -2,7 +2,7 @@
 
 const std::string &Entity::getClassName() const
 {
-    return className;
+    return m_className;
 }
 
 int Entity::getHealthPoints() const

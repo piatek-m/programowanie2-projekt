@@ -9,11 +9,11 @@
 class Player : public Entity
 {
 private:
-    const std::string playerName;
+    const std::string m_playerName;
     std::vector<StatusEffect> status; // [vector] PRZEROBIC NA ENUM [StatusEffectType]+STRUCT [StatusEffect]; buffy, debuffy
 
 public:
-    Player(std::string clName, int hp, double ms, std::string p_Name, std::string pStatus) : Entity(clName, hp, ms), playerName(p_Name) {};
+    Player(std::string className, int hp, double ms, std::string playerName, std::string pStatus) : Entity(className, hp, ms), m_playerName(playerName) {};
 
     const std::string &getPlayerName() const; // getter wybranego imienia Gracza
 

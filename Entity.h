@@ -7,12 +7,12 @@
 class Entity
 {
 private:
-    const std::string className; // nazwa danej klasy
-    int healthPoints;            // punkty życia
-    double moveSpeed;            // prędkość postaci
+    const std::string m_className; // nazwa danej klasy
+    int healthPoints;              // punkty życia
+    double moveSpeed;              // prędkość postaci
 
 public:
-    Entity(std::string cl_Name, int hp, double ms) : className(cl_Name), healthPoints(hp), moveSpeed(ms) {};
+    Entity(std::string className, int hp, double ms) : m_className(className), healthPoints(hp), moveSpeed(ms) {};
 
     const std::string &getClassName() const; // getter nazwy klasy
 

@@ -2,5 +2,5 @@
 
 const std::string &Player::getPlayerName() const
 {
-    return playerName;
+    return m_playerName;
 };
