@@ -1,6 +1,7 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
+#include "StatusEffectManager.h" // buffy i debuffy
 #include <iostream>
 
 // klasa bazowa dla wszystkich entity - gracza, przeciwników
@@ -11,18 +12,59 @@ private:
     int healthPoints;              // punkty życia
     double moveSpeed;              // prędkość postaci
 
+    StatusEffectManager statusManager; // obiekt odpowiedzialny za zarządzanie efektami
+
 public:
     Entity(std::string className, int hp, double ms) : m_className(className), healthPoints(hp), moveSpeed(ms) {};
 
-    const std::string &getClassName() const; // getter nazwy klasy
+    // getter nazwy klasy
+    const std::string &getClassName() const;
 
-    void setHealthPoints(int damage); // setter HP, implementacja otrzymywania obrażeń
+    // setter HP, implementacja otrzymywania obrażeń
+    void setHealthPoints(int damage);
 
-    int getHealthPoints() const; // getter HP
+    // getter HP
+    int getHealthPoints() const;
 
-    double getMoveSpeed() const; // getter moveSpeeda
+    // getter moveSpeeda
+    double getMoveSpeed() const;
+
+    // naklada efekt na target
+    void applyEffect(Entity &target);
 
     virtual ~Entity() = default;
+
+    // zarządzanie efektami oddelegowane do StatusEffectManager
+
+    // dodaje efekt
+    void addStatusEffect(const StatusEffect &effect)
+    {
+        statusManager.addEffect(effect);
+    }
+
+    // usuwa efekt
+    void removeStatusEffect(StatusEffectType type)
+    {
+        statusManager.removeEffect(type);
+    }
+
+    // sprawdza, czy ma dany efekt
+    bool hasStatus(StatusEffectType type) const
+    {
+        return statusManager.hasEffect(type);
+    }
+
+    // nadpisuje czas trwania posiadanego efektu
+    void updateEffectTime(int deltaTime)
+    {
+        statusManager.updateEffectTime(deltaTime);
+    }
+
+    // getter aktywnych efektow
+    std::vector<StatusEffect> getActiveEffects() const
+    {
+        return statusManager.getActiveEffects();
+    }
 };
 
 #endif
