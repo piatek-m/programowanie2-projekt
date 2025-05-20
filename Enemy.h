@@ -11,9 +11,9 @@ private:
     const std::string debuffType; // debuff przy zadaniu obrażeń graczowi
 
 public:
-    Enemy(std::string className, int hp, double ms, const std::string weak, const std::string debuff) : Entity(className, hp, ms), weakness(weak), debuffType(debuff) {}
+    Enemy(std::string className, int hp, double ms, const std::string weak, const std::string debuff = "none") : Entity(className, hp, ms), weakness(weak), debuffType(debuff) {}
 
-    const std::string &getEnemyWeakness() const; // getter podatności na dany typ obrażeń
+    const std::string &getSelfWeakness() const; // getter podatności na dany typ obrażeń
 
     const std::string &getOnHitDebuffType() const; // getter typu nakładanego debuffa
 };
