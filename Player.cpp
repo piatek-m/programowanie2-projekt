@@ -23,17 +23,27 @@ void Player::Inventory::addItem(const std::string &item)
 // usuwanie przedmiotu
 void Player::Inventory::removeItem(const std::string &item)
 {
-    auto it = std::find(m_items.begin(), m_items.end(), item);
-    if (it != m_items.end())
+    for (auto it = m_items.begin(); it != m_items.end(); ++it)
     {
-        m_items.erase(it);
+        if (*it == item)
+        {
+            m_items.erase(it);
+            break; // przerywamy po usunięciu
+        }
     }
 }
 
 // sprawdzanie czy przedmiot jest w ekwipunku
 bool Player::Inventory::hasItem(const std::string &item) const
 {
-    return std::find(m_items.begin(), m_items.end(), item) != m_items.end();
+    for (const auto &i : m_items)
+    {
+        if (i == item)
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 // wypisanie wszystkich przedmiotów
