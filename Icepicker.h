@@ -2,13 +2,15 @@
 #define ICEPICKER_H
 
 #include "Enemy.h"
+#include <memory>
 
-// tworzy przeciwnika wrażliwego na ciepło
-class Icepicker : public Enemy
-{
+class Icepicker : public Enemy {
 public:
-    // konstruktor tworzący klasę przeciwnika Icepicker
-    Icepicker(std::string className, int hp, double ms, const std::string weak, const std::string debuff) : Enemy("Icepicker", 40, 10, "heat", "wet") {};
+    Icepicker(std::string className, int hp, double ms, const std::string& weak, const std::string& debuff = "")
+        : Enemy(className, hp, ms, weak, debuff) {}
+
+    virtual std::unique_ptr<Icepicker> phaseChange() = 0; // zwraca nowy obiekt
+    virtual ~Icepicker() = default;
 };
 
 #endif
