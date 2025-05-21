@@ -2,15 +2,14 @@
 #define ICEPICKER_H
 
 #include "Enemy.h"
-#include <string>
+#include <memory>
 
-// Interfejs/bazowa klasa Icepicker
 class Icepicker : public Enemy {
 public:
-    Icepicker(std::string className, int hp, double ms, const std::string weak, const std::string debuff)
+    Icepicker(std::string className, int hp, double ms, const std::string& weak, const std::string& debuff = "")
         : Enemy(className, hp, ms, weak, debuff) {}
 
-    virtual void phaseChange() = 0; // zmiana fazy, zmiana statystyk icepickera
+    virtual std::unique_ptr<Icepicker> phaseChange() = 0; // zwraca nowy obiekt
     virtual ~Icepicker() = default;
 };
 
