@@ -4,12 +4,14 @@
 #include "Icepicker.h"
 #include "IcepickerPhase2.h"
 // klasa przeciwnika która ma więcej zdrowia ale nie daje debuffów
-class IcepickerPhase1 : public Icepicker {
+class IcepickerPhase1 : public Icepicker
+{
 public:
     IcepickerPhase1()
-        : Icepicker("Icepicker", 40, 10, "heat") {}
+        : Icepicker("Icepicker", 40, 10) {}
 
-    std::unique_ptr<Icepicker> phaseChange() override { 
+    std::unique_ptr<Icepicker> phaseChange() override
+    {
         std::cout << "Icepicker topi się i przechodzi do fazy 2!" << std::endl;
         return std::make_unique<IcepickerPhase2>(); // zwraca nowy obiekt IcepickerPhase2
     }

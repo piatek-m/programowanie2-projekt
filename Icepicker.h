@@ -4,9 +4,10 @@
 #include "Enemy.h"
 #include <memory>
 
-class Icepicker : public Enemy {
+class Icepicker : public Enemy
+{
 public:
-    Icepicker(std::string className, int hp, double ms, const std::string& weak, const std::string& debuff = "")
+    Icepicker(std::string className, int hp, double ms, StatusEffectType weak = StatusEffectType::onFire, StatusEffectType debuff = StatusEffectType::none)
         : Enemy(className, hp, ms, weak, debuff) {}
 
     virtual std::unique_ptr<Icepicker> phaseChange() = 0; // zwraca nowy obiekt

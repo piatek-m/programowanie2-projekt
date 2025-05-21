@@ -1,10 +1,10 @@
 #include "Enemy.h"
 
-const std::string &Enemy::getSelfWeakness() const
+const StatusEffectType &Enemy::getSelfWeakness() const
 {
     return weakness;
 }
-const std::string &Enemy::getOnHitDebuffType() const
+const StatusEffectType &Enemy::getOnHitDebuffType() const
 {
     return debuffType;
 }

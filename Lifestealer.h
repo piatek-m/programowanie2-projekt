@@ -9,7 +9,7 @@ class Lifestealer : public Enemy
 
 public:
     // konstruktor tworzący klasę przeciwnika Lifestealer
-    Lifestealer(std::string className, int hp, double ms, const std::string weak, const std::string debuff) : Enemy("Lifestealer", 30, 10, "none", "lifedrain") {};
+    Lifestealer(std::string className, int hp, double ms, const StatusEffectType weak, StatusEffectType debuff) : Enemy("Lifestealer", 30, 10, StatusEffectType::none, StatusEffectType::none) {};
 };
 
 #endif

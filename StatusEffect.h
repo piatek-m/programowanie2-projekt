@@ -4,11 +4,13 @@
 // typy efektow
 enum class StatusEffectType
 {
-    psychosis, // nakladany przez Eyesore
-    lifedrain, // nakladany przez Lifestealer
-    freezing,  // nakladany przez Icepicker w 1. fazie
-    wet,       // nakladany przez Icepicker w 2. fazie
-    fire,      // nakladane przez gracza oraz Enta jezeli jest podpalony
+    none,         // nie jest nakladany zaden debuff, dla zachowania spójności w konstruktorze Enemy
+    confusion,    // nakladany przez Eyesore
+    lifedrain,    // nakladany przez Lifestealer
+    freezing,     // nakladany przez Icepicker w 1. fazie
+    wetness,      // nakladany przez Icepicker w 2. fazie
+    onFire,       // nakladane przez gracza (przedmiot) oraz Enta jezeli jest podpalony
+    illumination, // nakladane przez gracza (przedmiot)
 };
 
 // poszczegolny efekt statusu, zawiera w sobie typ efektu i pozostaly czas trwania
