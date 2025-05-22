@@ -4,6 +4,7 @@
 #include "Entity.h"
 #include <string>
 #include <vector>
+#include "Item.h"
 
 // klasa gracza
 class Player : public Entity
@@ -22,12 +23,12 @@ public:
     class Inventory
     {
     private:
-        std::vector<std::string> m_items; // tablica wektorowa przechowująca przedmioty, std:vector<std::string> do zmiany jeśli zaimplementujemy osobną klasę na itemy
+        std::vector<std::shared_ptr<Item>> m_items; // smart pointer który pozwala na przechowywanie różnych podklas w wektorze
 
     public:
-        void addItem(const std::string &item); // dodawanie przedmiotu do ekwipunku
-        void removeItem(const std::string &item); // usuwanie przedmiotu z ekwipunku np. przy użyciu
-        bool hasItem(const std::string &item) const; // sprawdza czy przedmiot jest w ekwipunku
+        void addItem(const Item &item); // dodawanie przedmiotu do ekwipunku
+        void removeItem(const Item &item); // usuwanie przedmiotu z ekwipunku np. przy użyciu
+        bool hasItem(const Item &item) const; // sprawdza czy przedmiot jest w ekwipunku
         void listItems() const; // wypisuje wszystkie przedmioty, które gracz obecnie posiada
     };
 
