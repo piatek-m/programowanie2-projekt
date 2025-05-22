@@ -1,7 +1,6 @@
 #include "Entity.h"
 #include "Player.h"
-#include "Enemy.h"
-#include "Photophobe.h"
+#include "EnemyAggregator.h"
 
 using namespace std;
 

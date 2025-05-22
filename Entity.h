@@ -1,7 +1,7 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-#include "StatusEffectManager.h" // buffy i debuffy
+#include "StatusEffectAggregator.h" // buffy i debuffy
 #include <iostream>
 
 // klasa bazowa dla wszystkich entity - gracza, przeciwników
