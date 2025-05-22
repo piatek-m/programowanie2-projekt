@@ -1,13 +1,23 @@
 // #include "Entity.h"
 // #include "Player.h"
 // #include "EnemyAggregator.h"
-#include <ncurses.h>
 #include <iostream>
+
+// include Windowsowy
+#if defined(_WIN32) || defined(_WIN64)
+#include <conio.h>
+#endif
+
+// include Linuxowy
+#if defined(__linux__) || defined(__APPLE__)
+#include <ncurses.h>
+#endif
 
 using namespace std;
 
 int main()
 {
+    // wersja linuxowa
     initscr();            // Start curses mode
     keypad(stdscr, TRUE); // Enable arrow keys and function keys
     noecho();             // Do not print input chars
