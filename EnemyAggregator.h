@@ -1,12 +1,12 @@
 #ifndef ENEMYAGGREGATOR_H
 #define ENEMYAGGREGATOR_H
 
-#include "EnemyClasses/Enemy.h"
-#include "EnemyClasses/Ent.h"
-#include "EnemyClasses/Eyesore.h"
-#include "EnemyClasses/Icepicker.h"
-#include "EnemyClasses/IcepickerPhase1.h"
-#include "EnemyClasses/IcepickerPhase2.h"
-#include "EnemyClasses/Lifestealer.h"
+#include "Enemy.h"
+#include "Ent.h"
+#include "Eyesore.h"
+#include "Icepicker.h"
+#include "IcepickerPhase1.h"
+#include "IcepickerPhase2.h"
+#include "Lifestealer.h"
 
 #endif

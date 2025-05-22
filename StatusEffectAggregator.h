@@ -1,7 +1,7 @@
 #ifndef STATUSEFFECTAGGREGATOR_H
 #define STATUSEFFECTAGGREGATOR_H
 
-#include "StatusEffectClasses/StatusEffect.h"
-#include "StatusEffectClasses/StatusEffectManager.h"
+#include "StatusEffect.h"
+#include "StatusEffectManager.h"
 
 #endif
