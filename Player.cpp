@@ -1,6 +1,7 @@
 #include "Player.h"
 #include <iostream>
 #include <algorithm>
+#include "Item.h"
 
 // getter imienia
 const std::string &Player::getPlayerName() const
@@ -15,13 +16,13 @@ Player::Inventory &Player::getInventory()
 }
 
 // dodawanie przedmiotu
-void Player::Inventory::addItem(const std::string &item)
+void Player::Inventory::addItem(const Item &item)
 {
     m_items.push_back(item);
 }
 
 // usuwanie przedmiotu
-void Player::Inventory::removeItem(const std::string &item)
+void Player::Inventory::removeItem(const Item &item)
 {
     for (auto it = m_items.begin(); it != m_items.end(); ++it)
     {
@@ -34,7 +35,7 @@ void Player::Inventory::removeItem(const std::string &item)
 }
 
 // sprawdzanie czy przedmiot jest w ekwipunku
-bool Player::Inventory::hasItem(const std::string &item) const
+bool Player::Inventory::hasItem(const Item &item) const
 {
     for (const auto &i : m_items)
     {
@@ -52,6 +53,6 @@ void Player::Inventory::listItems() const
     std::cout << "Inventory items:\n";
     for (const auto &item : m_items)
     {
-        std::cout << "- " << item << "\n";
+        std::cout << "- " << item.getItemName() << "\n";
     }
 }
