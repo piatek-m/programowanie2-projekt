@@ -8,7 +8,7 @@ class Ent : public Enemy
 {
 public:
     // konstruktor tworzący klasę przeciwnika Ent
-    Ent(std::string className, int hp, double ms, StatusEffectType weak, StatusEffectType debuff) : Enemy("Ent", 50, 10, StatusEffectType::onFire) {};
+    Ent(std::string className, int hp, double ms, int MAX_HP, StatusEffectType weak, StatusEffectType debuff) : Enemy("Ent", 50, 10, 50, StatusEffectType::onFire) {};
 };
 
 #endif

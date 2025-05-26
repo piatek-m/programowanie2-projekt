@@ -16,8 +16,9 @@ enum class StatusEffectType
 // poszczegolny efekt statusu, zawiera w sobie typ efektu i pozostaly czas trwania
 struct StatusEffect
 {
-    StatusEffectType m_effectType; // typ efektu
-    int remainingDuration;         // pozostaly czas trwania efektu (w turach)
+    StatusEffectType m_effectType;  // typ efektu
+    const std::string m_effectName; // nazwa efektu
+    int remainingDuration;          // pozostaly czas trwania efektu (w turach)
 
     StatusEffect(StatusEffectType effectType, int remDur) : m_effectType(effectType), remainingDuration(remDur) {};
 };
