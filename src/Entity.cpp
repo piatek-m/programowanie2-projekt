@@ -22,5 +22,12 @@ double Entity::getMoveSpeed() const
 
 void Entity::takeDamage(int damage)
 {
-    healthPoints = healthPoints - damage;
+    healthPoints -= damage;
+    if (onUpdate)
+        onUpdate(*this);
+}
+
+void Entity::setOnUpdateCallback(std::function<void(const Entity &)> callback)
+{
+    onUpdate = callback;
 }

@@ -3,6 +3,7 @@
 
 #include "StatusEffectManager.h" // buffy i debuffy
 #include <iostream>
+#include <functional> // callback
 
 // klasa bazowa dla wszystkich entity - gracza, przeciwników
 class Entity
@@ -13,6 +14,8 @@ private:
     const int MAX_HEALTH_POINTS;   // maksymalne HP
     double moveSpeed;              // prędkość postaci
 
+    std::function<void(const Entity &)> onUpdate;
+
     StatusEffectManager statusManager; // obiekt odpowiedzialny za zarządzanie efektami
 
 public:
@@ -20,6 +23,9 @@ public:
 
     // getter nazwy klasy
     virtual const std::string &getClassName() const = 0;
+
+    // callback w momencie update'a
+    virtual void setOnUpdateCallback(std::function<void(const Entity &)> callback);
 
     // setter HP, implementacja otrzymywania obrażeń
     virtual void takeDamage(int damage) = 0;

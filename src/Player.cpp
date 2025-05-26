@@ -12,7 +12,13 @@ const std::string &Player::getClassName() const
     return Player::getPlayerName();
 }
 
-// dostęp do ekwipunku
+// dostęp do ekwipunku BEZ MODYFIKACJI
+const Player::Inventory &Player::getInventory() const
+{
+    return m_inventory;
+}
+
+// dostęp do ekwipunku z modifykacjami
 Player::Inventory &Player::getInventory()
 {
     return m_inventory;
@@ -60,4 +66,9 @@ void Player::Inventory::listItems() const
     {
         std::cout << "- " << item->getItemName() << "\n";
     }
+}
+
+std::vector<std::shared_ptr<Item>> Player::Inventory::getItems() const
+{
+    return m_items;
 }

@@ -1,6 +1,8 @@
 #ifndef STATUSEFFECT_H
 #define STATUSEFFECT_H
 
+#include <string>
+
 // typy efektow
 enum class StatusEffectType
 {

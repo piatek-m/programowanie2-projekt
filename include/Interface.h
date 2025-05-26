@@ -1,11 +1,13 @@
 #ifndef INTERFACE_H
 #define INTERFACE_H
 
-#include "IncludeAggregator.h"
+#include "Entity.h"
+#include "Player.h"
 #include <iostream>
 #include <string>
 #include <vector>
 #include <iomanip>
+#include <memory>
 
 // Windows
 #if defined(_WIN32) || defined(_WIN64)
@@ -31,15 +33,17 @@ private:
 
     // Granice poszczególnych fragmentów UI
     static const int ACTION_BOX_WIDTH = SCREEN_WIDTH / 2;                         // Szerokość okna walki
-    static const int ENTITY_BOX_WIDTH = ACTION_BOX_WIDTH / 2;                     // Szerokość fragmentu pojedynczego Entity (gracza lub potworka) wewnątrz okna walki (bez printowanej granicy)
+    static const int PLAYER_BOX_WIDTH = ACTION_BOX_WIDTH / 2;                     // Szerokość fragmentu gracza wewnątrz okna walki (bez printowanej granicy)
+    static const int ENEMY_BOX_WIDTH = ACTION_BOX_WIDTH / 2;                      // Szerokość fragmentu potworka wewnątrz okna walki (bez printowanej granicy)
     static const int INVENTORY_BOX_WIDTH = (SCREEN_WIDTH - ACTION_BOX_WIDTH) / 3; // Szerokość okna ekwipunku
     static const int CONTROLS_BOX_WIDTH = INVENTORY_BOX_WIDTH * 2;                // Szerokość okna z cheatsheetem sterowania
     static const int OPTIONS_BOX_HEIGHT = SCREEN_HEIGHT / 2;                      // Wysokość okna opcji dialogowych (i nie tylko dialogowych XD)
     static const int MESSAGE_BOX_HEIGHT = SCREEN_HEIGHT / 2;                      // Wysokość okna dzienniczka wiadomości (message log)
 
     // Scrollowanie dzienniczka
-    int messageScrollOffset = 0;                // Do scrollowania dzienniczka wiadomości
+    int messageScrollOffset = 0;                // Offset do scrollowania dzienniczka wiadomości
     static const int MAX_VISIBLE_MESSAGES = 10; // Ile wiadomości widać na raz w dzienniczku
+    std::vector<std::string> logMessages;       // Wiadomości w dzienniczku
 
     /*
         Funkcje pomocnicze zdefiniowane w
@@ -58,8 +62,63 @@ private:
     // Funkcja pomocnicza czyszcząca obszar (do czyszczenia okienek)
     void clearArea(int x, int y, int width, int height);
 
-    // Funkcja updateująca fragment UI danego Entity (połowa ACTION_BOXa), gracza i potworków
-    void updateEntitySection(std::shared_ptr<Entity> &Entity);
+public:
+    /*
+        Funkcje zdefiniowane
+            w Interface.cpp
+    */
+
+    // Funkcja updateująca fragment UI Gracza
+    void updatePlayerSection(const Entity &player);
+
+    // Updateuje fragment UI Enemy
+    void updateEnemySection(const Entity &entity);
+
+    // Update fragmentu UI Inventory
+    void updateInventorySection(const Player &player);
+
+    // Update boxa sterowania
+    void updateControlsSection();
+
+    // Update boxa opcji dialogowych
+    void updateOptionsSection(const Player &player);
+
+    // Update okienka dzienniczka
+    void updateMessagesSection();
+
+    // Tworzy granice UI
+    void drawBorders();
+
+    /*
+    void drawInitialInterface()
+    {
+        system("cls");
+
+        // Draw borders for all sections
+        drawBorders();
+
+        // Draw all sections
+        updatePlayerSection(player);
+        updateEnemySection();
+        updateInventorySection(player);
+        updateControlsSection();
+        updateOptionsSection(player);
+        updateMessagesSection();
+
+        // Hide cursor
+        CONSOLE_CURSOR_INFO cursorInfo;
+        GetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursorInfo);
+        cursorInfo.bVisible = false;
+        SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursorInfo);
+    }
+    */
+
+    /*
+        Funkcje scrollujące wiadomości w dzienniczku
+    */
+    void scrollMessagesUp();
+
+    void scrollMessagesDown();
 };
 
 #endif

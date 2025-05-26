@@ -14,7 +14,7 @@ private:
     const std::string m_playerName;
 
 public:
-    Player(std::string className, int hp, double ms, int MAX_HP = 100, std::string playerName)
+    Player(std::string className, int hp, double ms, int MAX_HP = 100, std::string playerName = "Me")
         : Entity(className, hp, ms, MAX_HP), m_playerName(playerName) {}
 
     // getter wybranego imienia gracza
@@ -66,7 +66,11 @@ public:
         void removeItem(const std::shared_ptr<Item> &item);    // usuwanie przedmiotu z ekwipunku np. przy użyciu
         bool hasItem(const std::shared_ptr<Item> &item) const; // sprawdza czy przedmiot jest w ekwipunku
         void listItems() const;                                // wypisuje wszystkie przedmioty, które gracz obecnie posiada
+        // getter itemów
+        std::vector<std::shared_ptr<Item>> getItems() const;
     };
+
+    const Inventory &getInventory() const; // dostęp do ekwipunku dla funkcji nie modifykujących go
 
     Inventory &getInventory(); // dostęp do ekwipunku
 

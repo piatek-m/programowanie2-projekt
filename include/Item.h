@@ -3,10 +3,8 @@
 
 #include <string>
 
-// forward declare, potrzebne do useItem
-class Player
-{
-};
+// forward declaration, potrzebne do useItem
+class Player;
 
 class Item
 {
