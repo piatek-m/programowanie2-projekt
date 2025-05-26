@@ -25,9 +25,9 @@ public:
     }
 
     // setter HP, implementacja otrzymywania obrażeń
-    void setHealthPoints(int damage) override
+    void takeDamage(int damage) override
     {
-        return Entity::setHealthPoints(damage);
+        return Entity::takeDamage(damage);
     }
 
     // getter HP

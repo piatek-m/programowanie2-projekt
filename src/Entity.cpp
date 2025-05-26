@@ -20,7 +20,7 @@ double Entity::getMoveSpeed() const
     return moveSpeed;
 }
 
-void Entity::setHealthPoints(int damage)
+void Entity::takeDamage(int damage)
 {
     healthPoints = healthPoints - damage;
 }

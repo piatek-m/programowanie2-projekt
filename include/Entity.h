@@ -22,7 +22,7 @@ public:
     virtual const std::string &getClassName() const = 0;
 
     // setter HP, implementacja otrzymywania obrażeń
-    virtual void setHealthPoints(int damage) = 0;
+    virtual void takeDamage(int damage) = 0;
 
     // getter HP
     virtual int getHealthPoints() const = 0;
