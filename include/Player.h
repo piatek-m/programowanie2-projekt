@@ -14,11 +14,46 @@ private:
     const std::string m_playerName;
 
 public:
-    Player(std::string className, int hp, double ms, std::string playerName)
-        : Entity(className, hp, ms), m_playerName(playerName) {}
+    Player(std::string className, int hp, double ms, int MAX_HP = 100, std::string playerName)
+        : Entity(className, hp, ms, MAX_HP), m_playerName(playerName) {}
 
     // getter wybranego imienia gracza
     const std::string &getPlayerName() const;
+
+    // getter nazwy klasy, w przypadku gracza zwraca imie
+    const std::string &getClassName() const override;
+
+    // setter HP, implementacja otrzymywania obrażeń
+    void setHealthPoints(int damage) override
+    {
+        return Entity::setHealthPoints(damage);
+    }
+
+    // getter HP
+    int getHealthPoints() const override
+    {
+        return Entity::getHealthPoints();
+    }
+
+    // getter maksymalnegoHP
+    const int getMaxHEALTH() const override
+    {
+        return Entity::getMaxHEALTH();
+    }
+
+    // getter moveSpeeda
+    double getMoveSpeed() const override
+    {
+        return Entity::getMoveSpeed();
+    }
+
+    // naklada efekt na target
+    void applyEffect(Entity &target) override
+    {
+        return Entity::applyEffect(target);
+    }
+
+    ~Player() = default;
 
     // klasa zagnieżdżona Inventory obsługująca ekwipunek gracza
     class Inventory

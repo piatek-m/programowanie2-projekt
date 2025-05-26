@@ -11,7 +11,48 @@ private:
     const StatusEffectType debuffType; // debuff przy zadaniu obrażeń graczowi
 
 public:
-    Enemy(std::string className, int hp, double ms, StatusEffectType weak, StatusEffectType debuff = StatusEffectType::none) : Entity(className, hp, ms), weakness(weak), debuffType(debuff) {}
+    Enemy(std::string className, int hp, double ms, int MAX_HP, StatusEffectType weak, StatusEffectType debuff = StatusEffectType::none) : Entity(className, hp, ms, MAX_HP), weakness(weak), debuffType(debuff) {}
+
+    /*
+            Metody Entity, deklarowane tutaj, aby Enemy nie było abstrakcyjne jak Entity
+            Mimo to korzystają z już podanych definicji metod dla Entity
+    */
+
+    // getter nazwy klasy
+    const std::string &getClassName() const override
+    {
+        return Entity::getClassName();
+    }
+
+    // setter HP, implementacja otrzymywania obrażeń
+    void setHealthPoints(int damage) override
+    {
+        return Entity::setHealthPoints(damage);
+    }
+
+    // getter HP
+    int getHealthPoints() const override
+    {
+        return Entity::getHealthPoints();
+    }
+
+    // getter maksymalnegoHP
+    const int getMaxHEALTH() const override
+    {
+        return Entity::getMaxHEALTH();
+    }
+
+    // getter moveSpeeda
+    double getMoveSpeed() const override
+    {
+        return Entity::getMoveSpeed();
+    }
+
+    // naklada efekt na target
+    void applyEffect(Entity &target) override
+    {
+        return Entity::applyEffect(target);
+    }
 
     const StatusEffectType &getSelfWeakness() const; // getter podatności na dany typ obrażeń
 

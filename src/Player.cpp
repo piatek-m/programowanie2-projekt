@@ -7,6 +7,11 @@ const std::string &Player::getPlayerName() const
     return m_playerName;
 }
 
+const std::string &Player::getClassName() const
+{
+    return Player::getPlayerName();
+}
+
 // dostęp do ekwipunku
 Player::Inventory &Player::getInventory()
 {

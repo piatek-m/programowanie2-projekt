@@ -10,27 +10,31 @@ class Entity
 private:
     const std::string m_className; // nazwa danej klasy
     int healthPoints;              // punkty życia
+    const int MAX_HEALTH_POINTS;   // maksymalne HP
     double moveSpeed;              // prędkość postaci
 
     StatusEffectManager statusManager; // obiekt odpowiedzialny za zarządzanie efektami
 
 public:
-    Entity(std::string className, int hp, double ms) : m_className(className), healthPoints(hp), moveSpeed(ms) {};
+    Entity(std::string className, int hp, double ms, int MAX_HP = 40) : m_className(className), healthPoints(hp), moveSpeed(ms), MAX_HEALTH_POINTS(MAX_HP) {};
 
     // getter nazwy klasy
-    const std::string &getClassName() const;
+    virtual const std::string &getClassName() const = 0;
 
     // setter HP, implementacja otrzymywania obrażeń
-    void setHealthPoints(int damage);
+    virtual void setHealthPoints(int damage) = 0;
 
     // getter HP
-    int getHealthPoints() const;
+    virtual int getHealthPoints() const = 0;
+
+    // getter maksymalnegoHP
+    virtual const int getMaxHEALTH() const = 0;
 
     // getter moveSpeeda
-    double getMoveSpeed() const;
+    virtual double getMoveSpeed() const = 0;
 
     // naklada efekt na target
-    void applyEffect(Entity &target);
+    virtual void applyEffect(Entity &target) = 0;
 
     virtual ~Entity() = default;
 

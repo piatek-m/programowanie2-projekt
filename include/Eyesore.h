@@ -9,7 +9,7 @@ class Eyesore : public Enemy
 
 public:
     // konstruktor tworzący klasę o nazwie Eyesore
-    Eyesore(std::string cl_Name, int hp, double ms, StatusEffectType weak, StatusEffectType debuff) : Enemy("Eyesore", 40, 10, StatusEffectType::illumination, StatusEffectType::confusion) {};
+    Eyesore(std::string cl_Name, int hp, double ms, int MAX_HP, StatusEffectType weak, StatusEffectType debuff) : Enemy("Eyesore", 40, 10, 40, StatusEffectType::illumination, StatusEffectType::confusion) {};
 };
 
 #endif

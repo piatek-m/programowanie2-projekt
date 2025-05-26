@@ -12,17 +12,6 @@
 #include "Player.h"
 #include "StatusEffect.h"
 #include "StatusEffectManager.h"
-
-// interfejs
-
-// Windows
-#if defined(_WIN32) || defined(_WIN64)
-#include <conio.h>
-#endif
-
-// System Unixowy
-#if defined(__linux__) || defined(__APPLE__)
-#include <ncurses.h>
-#endif
+#include "Interface.h"
 
 #endif
