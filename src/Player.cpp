@@ -1,16 +1,34 @@
 #include "Player.h"
 #include "Interface.h"
 #include <algorithm>
+#include <random>
 
 // getter imienia
 const std::string &Player::getPlayerName() const
 {
     return m_playerName;
 }
-
+// getter klasy
 const std::string &Player::getClassName() const
 {
     return Player::getPlayerName();
+}
+
+// atak symulujacy podwojny rzut kostka 1d6
+int Player::diceRollAttack(std::mt19937 &gen) {
+    std::uniform_int_distribution<> distrib(1, 6);
+
+    int firstRoll = distrib(gen);
+    std::cout << m_playerName << " wyrzucił: " << firstRoll << std::endl;
+
+    if (firstRoll >= 3) {
+        int secondRoll = distrib(gen);
+        // std::cout << "Pierwszy rzut udany! Zadajesz " << secondRoll << " obrażeń!" << std::endl;
+        return secondRoll;
+    } else {
+        // std::cout << "Atak nieudany! Nie wyrzucono wystarczającej liczby oczek." << std::endl;
+        return 0;
+    }
 }
 
 void Player::takeDamage(int damage)
