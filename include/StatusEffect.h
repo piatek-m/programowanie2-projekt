@@ -7,8 +7,7 @@
 enum class StatusEffectType
 {
     none,         // nie jest nakladany zaden debuff, dla zachowania spójności w konstruktorze Enemy
-    confusion,    // nakladany przez Eyesore
-    lifedrain,    // nakladany przez Lifestealer
+    confusion,    // nakladany przez Eyesore   
     wetness,      // nakladany przez Icepicker w 2. fazie
     onFire,       // nakladane przez gracza (przedmiot) oraz Enta jezeli jest podpalony
     illumination, // nakladane przez gracza (przedmiot)
@@ -29,8 +28,6 @@ struct StatusEffect
         {
         case StatusEffectType::confusion:
             return "Confusion";
-        case StatusEffectType::lifedrain:
-            return "Lifedrain";
         case StatusEffectType::wetness:
             return "Wetness";
         case StatusEffectType::onFire:
