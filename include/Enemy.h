@@ -4,6 +4,8 @@
 #include "Entity.h"
 #include <random> // std::mt19937
 
+class Player;
+
 // klasa bazowa przeciwników
 class Enemy : public Entity
 {
@@ -49,10 +51,7 @@ public:
     */
 
     // defaultowy atak dla wszystkich przeciwnikow
-    int attack(Entity &target, std::mt19937 &gen) override
-    {
-        return Entity::attack(target, gen);
-    }
+    virtual int attack(Player &target, std::mt19937 &gen);
 
     const StatusEffectType &getSelfWeakness() const; // getter podatności na dany typ obrażeń
 

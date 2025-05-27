@@ -5,6 +5,7 @@
 
 // forward declaration, potrzebne do useItem
 class Player;
+class Entity;
 
 class Item
 {
@@ -24,7 +25,7 @@ public:
     bool operator==(const Item &other) const;
 
     // użycie itemu, wykonuje daną akcję itemu zdefiniowaną w klasach dziedziczących oraz usuwa użyty przedmiot z inventory (implementować w dziedziczących)
-    virtual void useItem(Player &player) = 0;
+    virtual void useItem(Entity &target) = 0;
 
     // wirtualny dekonstruktor
     virtual ~Item() = default;

@@ -10,10 +10,74 @@
 int Interface::messageScrollOffset = 0;
 std::vector<std::string> Interface::logMessages;
 
+void Interface::printCentered(const std::string &text, int consoleWidth)
+{
+    int padding = (consoleWidth - static_cast<int>(text.length())) / 2;
+    if (padding < 0)
+        padding = 0;
+
+    std::cout << std::setw(padding + text.length()) << text << std::endl;
+}
+
+void Interface::drawBorders()
+{
+    {
+        system("cls");
+
+        // Granice zewnętrzne
+        drawHorizontalLine(0, 0, SCREEN_WIDTH, '-');                 // Górna
+        drawHorizontalLine(0, SCREEN_HEIGHT - 1, SCREEN_WIDTH, '-'); // Dolna
+        drawVerticalLine(0, 0, SCREEN_HEIGHT, '|');                  // Lewa
+        drawVerticalLine(SCREEN_WIDTH - 1, 0, SCREEN_HEIGHT, '|');   // Prawa
+
+        // Wewnętrzne granice pionowe
+        drawVerticalLine(PLAYER_BOX_WIDTH + ENEMY_BOX_WIDTH, 0, OPTIONS_BOX_HEIGHT, '|');                       // Między Enemy a Inventory
+        drawVerticalLine(OPTIONS_BOX_WIDTH, OPTIONS_BOX_HEIGHT, OPTIONS_BOX_HEIGHT, '|');                       // Między Options a messageLog
+        drawVerticalLine(PLAYER_BOX_WIDTH + ENEMY_BOX_WIDTH + INVENTORY_BOX_WIDTH, 0, OPTIONS_BOX_HEIGHT, '|'); // Między Inventory a Controls
+
+        // Granica pozioma po środku UI
+        drawHorizontalLine(0, OPTIONS_BOX_HEIGHT, SCREEN_WIDTH, '-');
+
+        /*
+            Wypisywanie + na skrzyżowaniach
+        */
+
+        gotoxy(PLAYER_BOX_WIDTH + ENEMY_BOX_WIDTH, 0); // Enemy - Inventory
+        std::cout << '+';
+        gotoxy(PLAYER_BOX_WIDTH + ENEMY_BOX_WIDTH + INVENTORY_BOX_WIDTH, 0); // Inventory-Controls
+        std::cout << '+';
+
+        // Po środku (poziomo)
+        gotoxy(0, OPTIONS_BOX_HEIGHT); // Środek-lewo
+        std::cout << '+';
+        gotoxy(PLAYER_BOX_WIDTH + ENEMY_BOX_WIDTH, OPTIONS_BOX_HEIGHT); // Monster - Inventory
+        std::cout << '+';
+        gotoxy(OPTIONS_BOX_WIDTH, OPTIONS_BOX_HEIGHT); // Options - MessageLog
+        std::cout << '+';
+        gotoxy(PLAYER_BOX_WIDTH + ENEMY_BOX_WIDTH + INVENTORY_BOX_WIDTH, OPTIONS_BOX_HEIGHT); // Inventory-Controls
+        std::cout << '+';
+        gotoxy(SCREEN_WIDTH - 1, OPTIONS_BOX_HEIGHT); // Środek-prawo
+        std::cout << '+';
+
+        // Dolne
+        gotoxy(0, SCREEN_HEIGHT - 1); // Dół-lewo
+        std::cout << '+';
+        gotoxy(OPTIONS_BOX_WIDTH, SCREEN_HEIGHT - 1); // Options - MessageLog
+        std::cout << '+';
+        gotoxy(SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1); // Dół-prawo
+        std::cout << '+';
+
+        gotoxy(0, 0); // Góra-lewo
+        std::cout << '+';
+        gotoxy(SCREEN_WIDTH - 1, 0); // Góra - prawo
+        std::cout << '+';
+    }
+}
+
 void Interface::updatePlayerSection(const Player &player)
 {
     // Czyszczenie fragmentu okienka z wyłączeniem granic
-    clearArea(1, 1, PLAYER_BOX_WIDTH, OPTIONS_BOX_HEIGHT);
+    clearArea(1, 1, PLAYER_BOX_WIDTH - 1, OPTIONS_BOX_HEIGHT - 1);
 
     gotoxy(2, 1);
     std::cout << player.getClassName();
@@ -33,23 +97,9 @@ void Interface::updatePlayerSection(const Player &player)
     }
 }
 
-void Interface::drawBorders()
+void Interface::clearEnemyArea()
 {
-    {
-        // Górna granica
-        drawHorizontalLine(0, 0, SCREEN_WIDTH);
-
-        // Dolna granica
-        drawHorizontalLine(0, SCREEN_HEIGHT - 1, SCREEN_WIDTH);
-
-        // Granice pionowe
-        drawVerticalLine(PLAYER_BOX_WIDTH, 0, OPTIONS_BOX_HEIGHT + 1);
-        drawVerticalLine(PLAYER_BOX_WIDTH + ENEMY_BOX_WIDTH, 0, OPTIONS_BOX_HEIGHT + 1);
-        drawVerticalLine(PLAYER_BOX_WIDTH + ENEMY_BOX_WIDTH + INVENTORY_BOX_WIDTH, 0, SCREEN_HEIGHT);
-
-        // Granica pozioma
-        drawHorizontalLine(0, OPTIONS_BOX_HEIGHT, PLAYER_BOX_WIDTH + ENEMY_BOX_WIDTH + INVENTORY_BOX_WIDTH);
-    }
+    clearArea(PLAYER_BOX_WIDTH + 1, 1, ENEMY_BOX_WIDTH - 1, OPTIONS_BOX_HEIGHT - 1);
 }
 
 void Interface::updateEnemySection(const Enemy &enemy)
@@ -95,49 +145,49 @@ void Interface::updateInventorySection(const Player &player)
 
 void Interface::updateControlsSection()
 {
-    gotoxy(PLAYER_BOX_WIDTH + ENEMY_BOX_WIDTH + INVENTORY_BOX_WIDTH + 2, 1);
+    gotoxy(ACTION_BOX_WIDTH + INVENTORY_BOX_WIDTH + 2, 1);
     std::cout << "Controls:";
 
-    gotoxy(PLAYER_BOX_WIDTH + ENEMY_BOX_WIDTH + INVENTORY_BOX_WIDTH + 2, 3);
+    gotoxy(ACTION_BOX_WIDTH + INVENTORY_BOX_WIDTH + 2, 3);
     std::cout << "W/Arrow Up - option above";
 
-    gotoxy(PLAYER_BOX_WIDTH + ENEMY_BOX_WIDTH + INVENTORY_BOX_WIDTH + 2, 4);
+    gotoxy(ACTION_BOX_WIDTH + INVENTORY_BOX_WIDTH + 2, 4);
     std::cout << "S/Arrow Down - option below";
 
-    gotoxy(PLAYER_BOX_WIDTH + ENEMY_BOX_WIDTH + INVENTORY_BOX_WIDTH + 2, 5);
+    gotoxy(ACTION_BOX_WIDTH + INVENTORY_BOX_WIDTH + 2, 5);
     std::cout << "1-9 - select option";
 
-    gotoxy(PLAYER_BOX_WIDTH + ENEMY_BOX_WIDTH + INVENTORY_BOX_WIDTH + 2, 6);
+    gotoxy(ACTION_BOX_WIDTH + INVENTORY_BOX_WIDTH + 2, 6);
     std::cout << "Enter - confirm selection";
 
-    gotoxy(PLAYER_BOX_WIDTH + ENEMY_BOX_WIDTH + INVENTORY_BOX_WIDTH + 2, 8);
+    gotoxy(ACTION_BOX_WIDTH + INVENTORY_BOX_WIDTH + 2, 8);
     std::cout << "J - scroll message log up";
 
-    gotoxy(PLAYER_BOX_WIDTH + ENEMY_BOX_WIDTH + INVENTORY_BOX_WIDTH + 2, 9);
+    gotoxy(ACTION_BOX_WIDTH + INVENTORY_BOX_WIDTH + 2, 9);
     std::cout << "K - scroll message log down";
 }
 
 void Interface::updateOptionsSection(const Player &player)
 {
-    clearArea(1, OPTIONS_BOX_HEIGHT + 1, PLAYER_BOX_WIDTH + ENEMY_BOX_WIDTH - 1, MESSAGE_BOX_HEIGHT - 1);
+    clearArea(1, OPTIONS_BOX_HEIGHT + 1, OPTIONS_BOX_WIDTH - 2, OPTIONS_BOX_HEIGHT - 2);
 
     gotoxy(2, OPTIONS_BOX_HEIGHT + 2);
-    std::cout << "Options:";
+    std::cout << "Actions:";
 
     for (size_t i = 0; i <= player.getInventory().getItems().size() && i < 10; i++)
     {
-        gotoxy(2, OPTIONS_BOX_HEIGHT + 3 + i);
+        gotoxy(2, OPTIONS_BOX_HEIGHT + 3 + i + 1);
 
         // dla 1 wypisuje Attack dla reszty itemki
-        std::cout << "[" << (i + 1) << "]" << (i == 0) ? "Attack" : player.getInventory().getItems()[i]->getItemName();
+        std::cout << "[" << (i + 1) << "] " << ((i == 0) ? "Attack" : "Use " + player.getInventory().getItems()[i]->getItemName());
     }
 }
 
 void Interface::updateMessagesSection()
 {
-    clearArea(PLAYER_BOX_WIDTH + ENEMY_BOX_WIDTH + 1, OPTIONS_BOX_HEIGHT + 1, INVENTORY_BOX_WIDTH - 1, MESSAGE_BOX_HEIGHT - 1);
+    clearArea(OPTIONS_BOX_WIDTH + 1, OPTIONS_BOX_HEIGHT + 1, MESSAGE_BOX_WIDTH - 2, MESSAGE_BOX_HEIGHT - 2);
 
-    gotoxy(PLAYER_BOX_WIDTH + ENEMY_BOX_WIDTH + 2, OPTIONS_BOX_HEIGHT + 2);
+    gotoxy(OPTIONS_BOX_WIDTH + 2, OPTIONS_BOX_HEIGHT + 2);
     std::cout << "Game Log: ";
 
     // Show scroll indicator if there are more messages
@@ -147,7 +197,7 @@ void Interface::updateMessagesSection()
                   << "-"
                   << std::min(messageScrollOffset + MAX_VISIBLE_MESSAGES, (int)logMessages.size()) /* żeby nie przeskrollować więcej niż jest wiadomości XD */
                   << "/" << logMessages.size()
-                  << "] J/K to scroll Up/Down";
+                  << "]";
     }
 
     // Dobór zakresu wiadomości do wyświetlenia
@@ -170,23 +220,35 @@ void Interface::updateMessagesSection()
     // Wypisz wiadomości w naszym dobranym wyżej zakresie
     for (int i = startIndex; i < endIndex; i++)
     {
-        gotoxy(PLAYER_BOX_WIDTH + ENEMY_BOX_WIDTH + 2, OPTIONS_BOX_HEIGHT + 3 + (i - startIndex));
+        int displayLine = MESSAGE_BOX_HEIGHT + 3 + 2 * (i - startIndex); // *2 -> co drugą linię wypisuje wiadomość
+        gotoxy(OPTIONS_BOX_WIDTH + 2, displayLine);
 
         /* For now trunkacja za długich wiadomości, dobrze byłoby, żeby robi-
            -ło ucięcie i dokończenie w nowej linii ale narazie nie chce mi się myśleć nad tym
         */
         std::string message = logMessages[i];
-        if (message.length() > INVENTORY_BOX_WIDTH - 4)
+        if (message.length() > MESSAGE_BOX_WIDTH - 4)
         {
-            message = message.substr(0, INVENTORY_BOX_WIDTH - 7) + "...";
+            message = message.substr(0, MESSAGE_BOX_WIDTH - 7) + "...";
         }
-        std::cout << message;
+        std::cout << "> " << message;
     }
 }
 
 void Interface::addLogMessage(std::string message)
 {
     Interface::logMessages.push_back(message);
+    // autoscroll
+    int totalMessages = logMessages.size();
+    if (totalMessages > MAX_VISIBLE_MESSAGES)
+    {
+        messageScrollOffset = totalMessages - MAX_VISIBLE_MESSAGES;
+    }
+    else
+    {
+        messageScrollOffset = 0;
+    }
+
     Interface::updateMessagesSection();
 }
 

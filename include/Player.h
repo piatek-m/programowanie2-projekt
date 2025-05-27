@@ -8,6 +8,8 @@
 #include <vector>
 #include <random> // std::mt19937
 
+class Enemy;
+
 // klasa gracza
 class Player : public Entity
 {
@@ -46,7 +48,7 @@ public:
     const std::string &getClassName() const override;
 
     // atak symulujacy podwojny rzut kostka 1d6
-    int attack(Entity &target, std::mt19937 &gen) override;
+    int attack(Enemy &target, std::mt19937 &gen);
 
     // setter HP, implementacja otrzymywania obrażeń
     void takeDamage(int damage) override;
@@ -62,6 +64,9 @@ public:
     {
         return Entity::getMaxHEALTH();
     }
+
+    // bierze decyzję gracza i jeśli kliknięto odpowiedni przycisk to wykonuje daną akcję (atakuje wroga, używa przedmiotu)
+    void getPlayerChoice(Enemy &target, std::mt19937 &gen);
 
     /* DEBUG HERE
     // naklada efekt na target

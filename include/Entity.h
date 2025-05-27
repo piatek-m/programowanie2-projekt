@@ -52,9 +52,6 @@ public:
     // naklada efekt na target
     // DEBUG HERE virtual void applyEffect(Entity &target) = 0;
 
-    // czysto wirtualna metoda ataku
-    virtual int attack(Entity &target, std::mt19937 &gen) = 0;
-
     virtual ~Entity() = default;
 
     // zarządzanie efektami oddelegowane do StatusEffectManager

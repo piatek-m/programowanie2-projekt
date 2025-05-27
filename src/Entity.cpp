@@ -1,4 +1,5 @@
 #include "Entity.h"
+#include "Interface.h"
 
 const std::string &Entity::getClassName() const
 {
@@ -15,19 +16,9 @@ const int Entity::getMaxHEALTH() const
     return MAX_HEALTH_POINTS;
 }
 
-int Entity::attack(Entity &target, std::mt19937 &gen)
-{
-    std::uniform_int_distribution<> damageDist(2, 5);
-    int damage = damageDist(gen);
-    target.takeDamage(damage);
-
-    return damage;
-}
-
 void Entity::takeDamage(int damage)
 {
     healthPoints -= damage;
-
     /*
     if (onUpdate)        // jeśli fun. onUpdate jest zdefiniowana
         onUpdate(*this); // wywołaj onUpdate biorąc jako argument siebie
