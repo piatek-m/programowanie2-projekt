@@ -1,47 +1,61 @@
-#include "IncludeAggregator.h"
-#include <iostream>
+#include "Interface.h"
+#include "Entity.h"
+#include "Player.h"
+
+#include "StatusEffect.h"
+#include "StatusEffectManager.h"
+
+#include "Enemy.h"
+#include "Ent.h"
+#include "Eyesore.h"
+#include "Icepicker.h"
+#include "IcepickerPhase1.h"
+#include "IcepickerPhase2.h"
+#include "Lifestealer.h"
+
+#include "Item.h"
+#include "HealingItem.h"
+#include "StatusEffectItem.h"
+#include "LightItem.h"
+#include "FireItem.h"
+
+// no chyba iostream jest już included XD
 
 using namespace std;
 
 int main()
 {
-    // wersja linuxowa
-    initscr();            // Start curses mode
-    keypad(stdscr, TRUE); // Enable arrow keys and function keys
-    noecho();             // Do not print input chars
-    cbreak();             // Disable line buffering
+    cout << "Hey! Please first input your name: ";
+    string playerName;
+    cin >> playerName;
+    Player player("Player", 100, 100, playerName);
 
-    int c;
+    Ent firstEnemy;
 
-    while (1)
-    {
-        c = getch();
+    /*
+        Inicjalizacja interfejsu
+    */
+    system("cls");
 
-        switch (c)
-        {
-        case KEY_UP:
-            printw("Up\n");
-            break;
-        case KEY_DOWN:
-            printw("Down\n");
-            break;
-        case KEY_LEFT:
-            printw("Left\n");
-            break;
-        case KEY_RIGHT:
-            printw("Right\n");
-            break;
-        case 'q':     // Exit on 'q' key
-            endwin(); // Restore terminal settings
-            return 0;
-        default:
-            printw("Not arrow: %c\n", c);
-            break;
-        }
+    Interface::setMessageScrollOffset(0);
 
-        refresh(); // Print to screen
-    }
+    // Rysowanie granic
+    Interface::drawBorders();
 
-    endwin(); // Should not be reached, but good practice
+    // Utworzenie wszystkich fragmentów UI
+    Interface::updatePlayerSection(player);
+    Interface::updateEnemySection(firstEnemy);
+    Interface::updateInventorySection(player);
+    Interface::updateControlsSection();
+    Interface::updateOptionsSection(player);
+    Interface::updateMessagesSection();
+
+    // Ukrycie kursora
+    CONSOLE_CURSOR_INFO cursorInfo;
+    GetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursorInfo);
+    cursorInfo.bVisible = false;
+    SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursorInfo);
+
+    system("pause");
     return 0;
 }

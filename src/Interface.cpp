@@ -7,6 +7,9 @@
 // wersja Windowsowa z użyciem conio.h
 #if defined(_WIN32) || defined(_WIN64)
 
+int Interface::messageScrollOffset = 0;
+std::vector<std::string> Interface::logMessages;
+
 void Interface::updatePlayerSection(const Player &player)
 {
     // Czyszczenie fragmentu okienka z wyłączeniem granic

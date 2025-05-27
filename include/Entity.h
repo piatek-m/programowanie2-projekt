@@ -4,7 +4,7 @@
 #include "StatusEffectManager.h" // buffy i debuffy
 #include <iostream>
 #include <functional> // callback
-#include <random> // std::mt19937
+#include <random>     // std::mt19937
 
 // klasa bazowa dla wszystkich entity - gracza, przeciwników
 class Entity
@@ -24,12 +24,12 @@ private:
 
 protected:
     // chroniony setter do HP
-    void setHealthPoints(int hp) {
+    void setHealthPoints(int hp)
+    {
         healthPoints = std::clamp(hp, 0, MAX_HEALTH_POINTS);
     }
 
 public:
-
     Entity(std::string className, int hp, int MAX_HP = 40) : m_className(className), healthPoints(hp), MAX_HEALTH_POINTS(MAX_HP), m_statusManager(this) {};
 
     // getter nazwy klasy
@@ -50,7 +50,7 @@ public:
     virtual const int getMaxHEALTH() const = 0;
 
     // naklada efekt na target
-    virtual void applyEffect(Entity &target) = 0;
+    // DEBUG HERE virtual void applyEffect(Entity &target) = 0;
 
     // czysto wirtualna metoda ataku
     virtual int attack(Entity &target, std::mt19937 &gen) = 0;

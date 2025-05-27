@@ -100,30 +100,6 @@ public:
     static void drawBorders();
 
     /*
-    void drawInitialInterface()
-    {
-        system("cls");
-
-        // Draw borders for all sections
-        drawBorders();
-
-        // Draw all sections
-        updatePlayerSection(player);
-        updateEnemySection();
-        updateInventorySection(player);
-        updateControlsSection();
-        updateOptionsSection(player);
-        updateMessagesSection();
-
-        // Hide cursor
-        CONSOLE_CURSOR_INFO cursorInfo;
-        GetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursorInfo);
-        cursorInfo.bVisible = false;
-        SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursorInfo);
-    }
-    */
-
-    /*
         Funkcje scrollujące wiadomości w dzienniczku
     */
     void scrollMessagesUp();

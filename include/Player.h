@@ -63,11 +63,13 @@ public:
         return Entity::getMaxHEALTH();
     }
 
+    /* DEBUG HERE
     // naklada efekt na target
     void applyEffect(Entity &target) override
     {
         return Entity::applyEffect(target);
     }
+    */
 
     ~Player() = default;
 

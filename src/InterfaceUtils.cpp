@@ -11,7 +11,7 @@ void Interface::gotoxy(short int x, short int y)
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
-void Interface::drawHorizontalLine(int x, int y, int length, char ch = '-')
+void Interface::drawHorizontalLine(int x, int y, int length, char ch)
 {
     gotoxy(x, y); // Przesunięcie kursora
     for (int i = 0; i < length; i++)
@@ -20,7 +20,7 @@ void Interface::drawHorizontalLine(int x, int y, int length, char ch = '-')
     }
 }
 
-void Interface::drawVerticalLine(int x, int y, int length, char ch = '|')
+void Interface::drawVerticalLine(int x, int y, int length, char ch)
 {
     for (int i = 0; i < length; i++)
     {
