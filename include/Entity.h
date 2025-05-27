@@ -20,10 +20,10 @@ private:
 
     // std::function<void(const Entity &)> onUpdate; -> zamieniono metody interfejsu na static więc dla uproszczenia wyrzucono lambdy i callbacki z kodu, zostają skomentowane jako "notatki"
 
-    StatusEffectManager statusManager; // obiekt odpowiedzialny za zarządzanie efektami
+    StatusEffectManager m_statusManager; // obiekt odpowiedzialny za zarządzanie efektami
 
 public:
-    Entity(std::string className, int hp, double ms, int MAX_HP = 40) : m_className(className), healthPoints(hp), moveSpeed(ms), MAX_HEALTH_POINTS(MAX_HP) {};
+    Entity(std::string className, int hp, double ms, int MAX_HP = 40) : m_className(className), healthPoints(hp), moveSpeed(ms), MAX_HEALTH_POINTS(MAX_HP), m_statusManager(this) {};
 
     // getter nazwy klasy
     virtual const std::string &getClassName() const = 0;
@@ -55,31 +55,31 @@ public:
     // dodaje efekt
     void addStatusEffect(const StatusEffect &effect)
     {
-        statusManager.addEffect(effect);
+        m_statusManager.addEffect(effect);
     }
 
     // usuwa efekt
     void removeStatusEffect(StatusEffectType type)
     {
-        statusManager.removeEffect(type);
+        m_statusManager.removeEffect(type);
     }
 
     // sprawdza, czy ma dany efekt
     bool hasStatus(StatusEffectType type) const
     {
-        return statusManager.hasEffect(type);
+        return m_statusManager.hasEffect(type);
     }
 
     // nadpisuje czas trwania posiadanego efektu
     void updateEffectTime(int deltaTime)
     {
-        statusManager.updateEffectTime(deltaTime);
+        m_statusManager.updateEffectTime(deltaTime);
     }
 
     // getter aktywnych efektow
     std::vector<StatusEffect> getActiveEffects() const
     {
-        return statusManager.getActiveEffects();
+        return m_statusManager.getActiveEffects();
     }
 };
 

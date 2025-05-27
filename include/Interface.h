@@ -45,7 +45,7 @@ private:
     static const int MESSAGE_BOX_HEIGHT = SCREEN_HEIGHT / 2;                      // Wysokość okna dzienniczka wiadomości (message log)
 
     // Scrollowanie dzienniczka
-    int messageScrollOffset = 0;                 // Offset do scrollowania dzienniczka wiadomości
+    static int messageScrollOffset;              // Offset do scrollowania dzienniczka wiadomości
     static const int MAX_VISIBLE_MESSAGES = 10;  // Ile wiadomości widać na raz w dzienniczku
     static std::vector<std::string> logMessages; // Wiadomości w dzienniczku
 
@@ -88,7 +88,13 @@ public:
     static void updateOptionsSection(const Player &player);
 
     // Update okienka dzienniczka
-    void updateMessagesSection();
+    static void updateMessagesSection();
+
+    // Dodaje wiadomość do wektora dzienniczka
+    static void addLogMessage(std::string message);
+
+    // Getter wektora dzienniczka
+    static std::vector<std::string> getLogMessages();
 
     // Tworzy granice UI
     static void drawBorders();
@@ -123,6 +129,12 @@ public:
     void scrollMessagesUp();
 
     void scrollMessagesDown();
+
+    // ustawienie messageScrollOffset, zmienna jest static i prywatna wiec nie da sie w klasie zdefiniować wartości, ani zmienić ręcznie poza nią
+    static void setMessageScrollOffset(int messScrlOffset)
+    {
+        messageScrollOffset = messScrlOffset;
+    }
 };
 
 #endif

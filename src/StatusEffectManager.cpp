@@ -1,6 +1,24 @@
 #include "StatusEffectManager.h"
 #include "Interface.h"
+#include "Entity.h"
 #include <algorithm>
+
+std::string StatusEffectManager::statusEffectTypeToString(const StatusEffectType type) const
+{
+    switch (type)
+    {
+    case StatusEffectType::confusion:
+        return "Confusion";
+    case StatusEffectType::wetness:
+        return "Wetness";
+    case StatusEffectType::onFire:
+        return "On Fire";
+    case StatusEffectType::illumination:
+        return "Illumination";
+    default:
+        return "";
+    }
+}
 
 void StatusEffectManager::addEffect(const StatusEffect &effect)
 {
@@ -19,6 +37,7 @@ void StatusEffectManager::addEffect(const StatusEffect &effect)
     }
     // jesli nie jest nałożony to dodaje efekt
     activeEffects.push_back(effect);
+    Interface::getLogMessages().push_back(m_managedEntity->getClassName() + " received effect " + effect.getStatusEffectName() + ". ");
 }
 
 void StatusEffectManager::removeEffect(StatusEffectType type)
@@ -37,6 +56,7 @@ void StatusEffectManager::removeEffect(StatusEffectType type)
                            return e.m_effectType == type;
                        }),
         activeEffects.end());
+    Interface::getLogMessages().push_back(m_managedEntity->getClassName() + " lost effect " + statusEffectTypeToString(type) + ". ");
 }
 
 bool StatusEffectManager::hasEffect(StatusEffectType type) const
@@ -62,6 +82,17 @@ void StatusEffectManager::updateEffectTime(int deltaTime)
         e.remainingDuration -= deltaTime;
     }
 
+    // przechowuje efekty, których czas trwania <= 0
+    std::vector<StatusEffectType> expiredEffects;
+
+    for (const auto &e : activeEffects)
+    {
+        if (e.remainingDuration <= 0)
+        {
+            expiredEffects.push_back(e.m_effectType);
+        }
+    }
+
     // usuwa efekty dla których skończył się czas (te wyrzucone poza zakres przez remove_if)
     activeEffects.erase(
         // remove_if zostawia wszystkie aktywne efekty i usuwa z zakresu wektora te dla których czas się skończył
@@ -72,6 +103,11 @@ void StatusEffectManager::updateEffectTime(int deltaTime)
                            return e.remainingDuration <= 0;
                        }),
         activeEffects.end());
+
+    for (StatusEffectType type : expiredEffects)
+    {
+        Interface::getLogMessages().push_back(m_managedEntity->getClassName() + " lost effect " + statusEffectTypeToString(type) + ". ");
+    }
 }
 
 std::vector<StatusEffect> StatusEffectManager::getActiveEffects() const

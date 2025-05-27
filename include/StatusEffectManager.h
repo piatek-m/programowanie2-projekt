@@ -5,13 +5,22 @@
 #include "StatusEffect.h"
 #include <vector>
 
+class Entity;
+
 // manager efektów, dodaje, usuwa, sprawdza czy posiada, etc.
 class StatusEffectManager
 {
 private:
+    Entity *m_managedEntity; // wskaźnik na obiekt, którego efektami zarządza Manager
+
     std::vector<StatusEffect> activeEffects; // przetrzymuje aktywne efekty
 
 public:
+    StatusEffectManager(Entity *managedEntity) : m_managedEntity(managedEntity) {};
+
+    // funkcja pomocnicza do wyciągania stringa z typu
+    std::string statusEffectTypeToString(const StatusEffectType type) const;
+
     // dodaje efekt
     void addEffect(const StatusEffect &effect);
 
