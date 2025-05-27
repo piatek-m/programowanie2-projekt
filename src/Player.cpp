@@ -19,16 +19,44 @@ int Player::attack(Entity &target, std::mt19937 &gen) {
     std::uniform_int_distribution<> dice(1, 6);
     int firstRoll = dice(gen);
 
-    if (firstRoll >= 3) {
-        int secondRoll = dice(gen);
+  // sprawdź czy gracz ma debuff wetness lub confusion
+    bool hasWetness = false;
+    bool hasConfusion = false;
 
+    for (const auto& effect : m_statusEffects) {
+        if (effect.m_effectType == StatusEffectType::wetness) {
+            hasWetness = true;
+        } else if (effect.m_effectType == StatusEffectType::confusion) {
+            hasConfusion = true;
+        }
+    }
+
+    // jeśli gracz ma efekt wetness
+    if (hasWetness) {
+        firstRoll = std::max(1, firstRoll - 1); // zapewnia że wynik nie będzie mniejszy niż 1
+    }
+
+    // jeśli wynik pierwszego rzutu jest mniejszy niż 3 atak nie trafia
+    if (firstRoll >= 3) {
+        // jeśli gracz ma efekt confusion
+       if (hasConfusion) {
+        int confusionRoll = dice(gen);
+        if (confusionRoll < 3) {
+            // gracz zadaje obrażenia sobie
+            int selfDamage = dice(gen);
+            player.takeDamage(selfDamage);
+            return selfDamage;
+        }
+    } else {
+        // normalny atak
+        int secondRoll = dice(gen);
         target.takeDamage(secondRoll);
         return secondRoll;
-    } else {
-
-        return 0;
     }
-}
+    } else {
+        return 0;
+    } 
+    }
 
 void Player::takeDamage(int damage)
 {
