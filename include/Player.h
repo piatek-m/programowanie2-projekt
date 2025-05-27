@@ -6,6 +6,7 @@
 #include <memory> // shared_ptr w wektorze items
 #include <string>
 #include <vector>
+#include <random> // std::mt19937
 
 // klasa gracza
 class Player : public Entity
@@ -44,6 +45,9 @@ public:
     // getter nazwy klasy, w przypadku gracza zwraca imie
     const std::string &getClassName() const override;
 
+    // atak symulujacy podwojny rzut kostka 1d6
+    int diceRollAttack(std::mt19937 &gen);
+
     // setter HP, implementacja otrzymywania obrażeń
     void takeDamage(int damage) override;
 
@@ -70,6 +74,8 @@ public:
     {
         return Entity::applyEffect(target);
     }
+
+   
 
     ~Player() = default;
 
