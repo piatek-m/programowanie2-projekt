@@ -36,8 +36,8 @@ private:
     Inventory m_inventory; // prywatny ekwipunek dla gracza
 
 public:
-    Player(std::string className, int hp, double ms, int MAX_HP = 100, std::string playerName = "Me")
-        : Entity(className, hp, ms, MAX_HP), m_playerName(playerName), m_inventory(this) {}
+    Player(std::string className, int hp, int MAX_HP = 100, std::string playerName = "Me")
+        : Entity(className, hp, MAX_HP), m_playerName(playerName), m_inventory(this) {}
 
     // getter wybranego imienia gracza
     const std::string &getPlayerName() const;
@@ -46,7 +46,7 @@ public:
     const std::string &getClassName() const override;
 
     // atak symulujacy podwojny rzut kostka 1d6
-    int diceRollAttack(std::mt19937 &gen);
+    int attack(Entity &target, std::mt19937 &gen) override;
 
     // setter HP, implementacja otrzymywania obrażeń
     void takeDamage(int damage) override;
@@ -63,19 +63,11 @@ public:
         return Entity::getMaxHEALTH();
     }
 
-    // getter moveSpeeda
-    double getMoveSpeed() const override
-    {
-        return Entity::getMoveSpeed();
-    }
-
     // naklada efekt na target
     void applyEffect(Entity &target) override
     {
         return Entity::applyEffect(target);
     }
-
-   
 
     ~Player() = default;
 

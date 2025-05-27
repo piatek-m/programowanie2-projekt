@@ -8,7 +8,7 @@ class IcepickerPhase1 : public Icepicker
 {
 public:
     IcepickerPhase1()
-        : Icepicker("Icepicker", 40, 10, 50) {}
+        : Icepicker("Icepicker", 40, 50) {}
 
     std::unique_ptr<Icepicker> phaseChange() override
     {
