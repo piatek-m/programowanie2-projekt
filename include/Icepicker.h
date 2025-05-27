@@ -7,8 +7,8 @@
 class Icepicker : public Enemy
 {
 public:
-    Icepicker(std::string className, int hp, double ms, int MAX_HP, StatusEffectType weak = StatusEffectType::onFire, StatusEffectType debuff = StatusEffectType::none)
-        : Enemy(className, hp, ms, MAX_HP, weak, debuff) {}
+    Icepicker(std::string className, int hp, int MAX_HP, StatusEffectType weak = StatusEffectType::onFire, StatusEffectType debuff = StatusEffectType::none)
+        : Enemy(className, hp, MAX_HP, weak, debuff) {}
 
     virtual std::unique_ptr<Icepicker> phaseChange() = 0; // zwraca nowy obiekt
     virtual ~Icepicker() = default;

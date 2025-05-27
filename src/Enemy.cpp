@@ -1,5 +1,6 @@
 #include "Enemy.h"
 #include "Interface.h"
+#include <random> // std::mt19937
 
 const StatusEffectType &Enemy::getSelfWeakness() const
 {

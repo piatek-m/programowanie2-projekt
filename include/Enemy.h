@@ -2,6 +2,7 @@
 #define ENEMY_H
 
 #include "Entity.h"
+#include <random> // std::mt19937
 
 // klasa bazowa przeciwników
 class Enemy : public Entity
@@ -10,8 +11,9 @@ private:
     const StatusEffectType weakness;   // słabość przeciwnika, ten typ zadaje więcej obrażeń
     const StatusEffectType debuffType; // debuff przy zadaniu obrażeń graczowi
 
+
 public:
-    Enemy(std::string className, int hp, double ms, int MAX_HP, StatusEffectType weak, StatusEffectType debuff = StatusEffectType::none) : Entity(className, hp, ms, MAX_HP), weakness(weak), debuffType(debuff) {}
+    Enemy(std::string className, int hp, int MAX_HP, StatusEffectType weak, StatusEffectType debuff = StatusEffectType::none) : Entity(className, hp, MAX_HP), weakness(weak), debuffType(debuff){}
 
     /*
             Metody Entity, deklarowane tutaj, aby Enemy nie było abstrakcyjne jak Entity
@@ -39,16 +41,16 @@ public:
         return Entity::getMaxHEALTH();
     }
 
-    // getter moveSpeeda
-    double getMoveSpeed() const override
-    {
-        return Entity::getMoveSpeed();
-    }
-
     // naklada efekt na target
     void applyEffect(Entity &target) override
     {
         return Entity::applyEffect(target);
+    }
+
+    // defaultowy atak dla wszystkich przeciwnikow
+    int attack(Entity &target, std::mt19937 &gen) override
+    {
+        return Entity::attack(target,gen);
     }
 
     const StatusEffectType &getSelfWeakness() const; // getter podatności na dany typ obrażeń

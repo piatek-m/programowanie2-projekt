@@ -4,6 +4,7 @@
 #include "StatusEffectManager.h" // buffy i debuffy
 #include <iostream>
 #include <functional> // callback
+#include <random> // std::mt19937
 
 // klasa bazowa dla wszystkich entity - gracza, przeciwników
 class Entity
@@ -12,7 +13,6 @@ private:
     const std::string m_className; // nazwa danej klasy
     int healthPoints;              // punkty życia
     const int MAX_HEALTH_POINTS;   // maksymalne HP
-    double moveSpeed;              // prędkość postaci
 
     // Funkcja zwrotna, aktywowana w momencie update'u poszczególnych składowych obiektu, używana do wypisywania na UI zaktualizowanych informacji
     // dzięki niej Entity nie musi includowac Interface (Interface juz includuje Entity)
@@ -22,8 +22,15 @@ private:
 
     StatusEffectManager m_statusManager; // obiekt odpowiedzialny za zarządzanie efektami
 
+protected:
+    // chroniony setter do HP
+    void setHealthPoints(int hp) {
+        healthPoints = std::clamp(hp, 0, MAX_HEALTH_POINTS);
+    }
+
 public:
-    Entity(std::string className, int hp, double ms, int MAX_HP = 40) : m_className(className), healthPoints(hp), moveSpeed(ms), MAX_HEALTH_POINTS(MAX_HP), m_statusManager(this) {};
+
+    Entity(std::string className, int hp, int MAX_HP = 40) : m_className(className), healthPoints(hp), MAX_HEALTH_POINTS(MAX_HP), m_statusManager(this) {};
 
     // getter nazwy klasy
     virtual const std::string &getClassName() const = 0;
@@ -42,11 +49,11 @@ public:
     // getter maksymalnego HP
     virtual const int getMaxHEALTH() const = 0;
 
-    // getter moveSpeeda
-    virtual double getMoveSpeed() const = 0;
-
     // naklada efekt na target
     virtual void applyEffect(Entity &target) = 0;
+
+    // czysto wirtualna metoda ataku
+    virtual int attack(Entity &target, std::mt19937 &gen) = 0;
 
     virtual ~Entity() = default;
 
