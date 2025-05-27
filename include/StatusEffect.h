@@ -9,7 +9,6 @@ enum class StatusEffectType
     none,         // nie jest nakladany zaden debuff, dla zachowania spójności w konstruktorze Enemy
     confusion,    // nakladany przez Eyesore
     lifedrain,    // nakladany przez Lifestealer
-    freezing,     // nakladany przez Icepicker w 1. fazie
     wetness,      // nakladany przez Icepicker w 2. fazie
     onFire,       // nakladane przez gracza (przedmiot) oraz Enta jezeli jest podpalony
     illumination, // nakladane przez gracza (przedmiot)
@@ -18,11 +17,30 @@ enum class StatusEffectType
 // poszczegolny efekt statusu, zawiera w sobie typ efektu i pozostaly czas trwania
 struct StatusEffect
 {
-    StatusEffectType m_effectType;  // typ efektu
-    const std::string m_effectName; // nazwa efektu
-    int remainingDuration;          // pozostaly czas trwania efektu (w turach)
+    StatusEffectType m_effectType; // typ efektu
+    int remainingDuration;         // pozostaly czas trwania efektu (w turach)
 
     StatusEffect(StatusEffectType effectType, int remDur) : m_effectType(effectType), remainingDuration(remDur) {};
+
+    // getter nazwy efektu - używane w interfejsie
+    const std::string getStatusEffectName() const
+    {
+        switch (m_effectType)
+        {
+        case StatusEffectType::confusion:
+            return "Confusion";
+        case StatusEffectType::lifedrain:
+            return "Lifedrain";
+        case StatusEffectType::wetness:
+            return "Wetness";
+        case StatusEffectType::onFire:
+            return "On Fire";
+        case StatusEffectType::illumination:
+            return "Illumination";
+        default:
+            return "";
+        }
+    }
 };
 
 #endif

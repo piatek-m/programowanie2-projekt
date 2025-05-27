@@ -26,7 +26,7 @@ void Interface::updatePlayerSection(const Player &player)
     for (size_t i = 0; i < effects.size() && i < 5; i++)
     {
         gotoxy(2, 6 + i);
-        std::cout << "- " << effects[i].m_effectName << " (" << effects[i].remainingDuration << "turns)";
+        std::cout << "- " << effects[i].getStatusEffectName() << " (" << effects[i].remainingDuration << "turns)";
     }
 }
 

@@ -1,4 +1,5 @@
 #include "StatusEffectManager.h"
+#include "Interface.h"
 #include <algorithm>
 
 void StatusEffectManager::addEffect(const StatusEffect &effect)
