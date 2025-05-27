@@ -1,4 +1,5 @@
 #include "Lifestealer.h"
+#include <random>
 
 int Lifestealer::attack(Entity &target, std::mt19937 &gen) {
     std::uniform_int_distribution<> damageDist(2, 5);
