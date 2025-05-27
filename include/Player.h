@@ -18,10 +18,10 @@ public:
     private:
         std::vector<std::shared_ptr<Item>> m_items; // smart pointer który pozwala na przechowywanie różnych podklas w wektorze
 
-        Player *m_owner; // wskaźnik na obiekt gracza będący klasą zewnętrzną ekwipunku, potrzebny do użycia metod zarządzających interfejsem wewnątrz Inventory gracza
+        Player *m_owner; // wskaźnik na obiekt gracza będący obiektem zewnętrznym ekwipunku, potrzebny do użycia metod zarządzających interfejsem wewnątrz metod Inventory (normalnie Inventory nie ma dostępu do wskaźnika "this" klasy Player)
 
     public:
-        Inventory(Player *owner) : m_owner(owner) {}; // konstruktor ustawiający na ownera ekwipunku obiekt zewnętrzny (gracza), potrzebny, żeby przesłać obiekt klasy Player do metod Interface wewnątrz Inventoory
+        Inventory(Player *owner) : m_owner(owner) {}; // konstruktor ustawiający na ownera ekwipunku obiekt zewnętrzny (gracza), potrzebny, żeby przesłać obiekt klasy Player do metod Interface wewnątrz Inventory
 
         void addItem(const std::shared_ptr<Item> &item);       // dodawanie przedmiotu do ekwipunku
         void removeItem(const std::shared_ptr<Item> &item);    // usuwanie przedmiotu z ekwipunku np. przy użyciu

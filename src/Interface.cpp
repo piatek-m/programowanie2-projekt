@@ -72,7 +72,7 @@ void Interface::updateEnemySection(const Enemy &enemy)
     for (size_t i = 0; i < effects.size() && i < 5; i++)
     {
         gotoxy(2, 6 + i);
-        std::cout << "- " << effects[i].m_effectName << " (" << effects[i].remainingDuration << "turns)";
+        std::cout << "- " << effects[i].getStatusEffectName() << " (" << effects[i].remainingDuration << "turns)";
     }
 }
 
@@ -179,6 +179,17 @@ void Interface::updateMessagesSection()
         }
         std::cout << message;
     }
+}
+
+void Interface::addLogMessage(std::string message)
+{
+    Interface::logMessages.push_back(message);
+    Interface::updateMessagesSection();
+}
+
+std::vector<std::string> Interface::getLogMessages()
+{
+    return Interface::logMessages;
 }
 
 void Interface::scrollMessagesUp()
