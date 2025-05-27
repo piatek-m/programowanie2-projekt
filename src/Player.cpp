@@ -2,7 +2,7 @@
 #include "Interface.h"
 #include <algorithm>
 #include <random> // std::mt19937
-
+#include "StatusEffect.h"
 // getter imienia
 const std::string &Player::getPlayerName() const
 {
