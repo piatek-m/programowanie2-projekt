@@ -7,7 +7,6 @@
 #include <string>
 #include <vector>
 #include <random> // std::mt19937
-#include "StatusEffect.h"
 
 // klasa gracza
 class Player : public Entity
