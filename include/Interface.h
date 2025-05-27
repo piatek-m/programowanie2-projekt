@@ -1,8 +1,12 @@
 #ifndef INTERFACE_H
 #define INTERFACE_H
 
-#include "Entity.h"
-#include "Player.h"
+// #include "Entity.h"
+// #include "Player.h" -> przeniesione do Interface.cpp
+class Player;
+// #include "Enemy.h" -> przeniesione do Interface.cpp
+class Enemy;
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -41,9 +45,9 @@ private:
     static const int MESSAGE_BOX_HEIGHT = SCREEN_HEIGHT / 2;                      // Wysokość okna dzienniczka wiadomości (message log)
 
     // Scrollowanie dzienniczka
-    int messageScrollOffset = 0;                // Offset do scrollowania dzienniczka wiadomości
-    static const int MAX_VISIBLE_MESSAGES = 10; // Ile wiadomości widać na raz w dzienniczku
-    std::vector<std::string> logMessages;       // Wiadomości w dzienniczku
+    int messageScrollOffset = 0;                 // Offset do scrollowania dzienniczka wiadomości
+    static const int MAX_VISIBLE_MESSAGES = 10;  // Ile wiadomości widać na raz w dzienniczku
+    static std::vector<std::string> logMessages; // Wiadomości w dzienniczku
 
     /*
         Funkcje pomocnicze zdefiniowane w
@@ -51,16 +55,16 @@ private:
     */
 
     // Funkcja pomocnicza ustawiająca kursor w punkcie (X,Y)
-    void gotoxy(short int x, short int y);
+    static void gotoxy(short int x, short int y);
 
     // Funkcja pomocnicza rysująca granicę poziomą
-    void drawHorizontalLine(int x, int y, int length, char ch = '-');
+    static void drawHorizontalLine(int x, int y, int length, char ch = '-');
 
     // Funkcja pomocnicza rysująca granicę pionową
-    void drawVerticalLine(int x, int y, int length, char ch = '|');
+    static void drawVerticalLine(int x, int y, int length, char ch = '|');
 
     // Funkcja pomocnicza czyszcząca obszar (do czyszczenia okienek)
-    void clearArea(int x, int y, int width, int height);
+    static void clearArea(int x, int y, int width, int height);
 
 public:
     /*
@@ -69,25 +73,25 @@ public:
     */
 
     // Funkcja updateująca fragment UI Gracza
-    void updatePlayerSection(const Entity &player);
+    static void updatePlayerSection(const Player &player);
 
     // Updateuje fragment UI Enemy
-    void updateEnemySection(const Entity &entity);
+    static void updateEnemySection(const Enemy &enemy);
 
     // Update fragmentu UI Inventory
-    void updateInventorySection(const Player &player);
+    static void updateInventorySection(const Player &player);
 
     // Update boxa sterowania
-    void updateControlsSection();
+    static void updateControlsSection();
 
     // Update boxa opcji dialogowych
-    void updateOptionsSection(const Player &player);
+    static void updateOptionsSection(const Player &player);
 
     // Update okienka dzienniczka
     void updateMessagesSection();
 
     // Tworzy granice UI
-    void drawBorders();
+    static void drawBorders();
 
     /*
     void drawInitialInterface()

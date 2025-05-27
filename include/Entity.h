@@ -14,7 +14,11 @@ private:
     const int MAX_HEALTH_POINTS;   // maksymalne HP
     double moveSpeed;              // prędkość postaci
 
-    std::function<void(const Entity &)> onUpdate;
+    // Funkcja zwrotna, aktywowana w momencie update'u poszczególnych składowych obiektu, używana do wypisywania na UI zaktualizowanych informacji
+    // dzięki niej Entity nie musi includowac Interface (Interface juz includuje Entity)
+    // zmienna przechowująca funkcję zwracającą void, przyjmująca jako argument const Entity&
+
+    // std::function<void(const Entity &)> onUpdate; -> zamieniono metody interfejsu na static więc dla uproszczenia wyrzucono lambdy i callbacki z kodu, zostają skomentowane jako "notatki"
 
     StatusEffectManager statusManager; // obiekt odpowiedzialny za zarządzanie efektami
 
@@ -24,16 +28,18 @@ public:
     // getter nazwy klasy
     virtual const std::string &getClassName() const = 0;
 
-    // callback w momencie update'a
-    virtual void setOnUpdateCallback(std::function<void(const Entity &)> callback);
+    // Ustawienie funkcji zwrotnej
+    // jako argument przyjmuje zmienną zawierającą funkcję zwracającą void, która sama w sobie przyjmuje const Entity& (wewnątrz setOnUpdateCallback ta zmienna, czyli ta funkcja nazywa się callback)
 
-    // setter HP, implementacja otrzymywania obrażeń
+    // virtual void setOnUpdateCallback(std::function<void(const Entity &)> callback); -> zamieniono metody interfejsu na static więc dla uproszczenia wyrzucono lambdy i callbacki z kodu, zostają skomentowane jako "notatki"
+
+    // implementacja otrzymywania obrażeń
     virtual void takeDamage(int damage) = 0;
 
     // getter HP
     virtual int getHealthPoints() const = 0;
 
-    // getter maksymalnegoHP
+    // getter maksymalnego HP
     virtual const int getMaxHEALTH() const = 0;
 
     // getter moveSpeeda

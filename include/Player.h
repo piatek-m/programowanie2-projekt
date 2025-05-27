@@ -10,12 +10,33 @@
 // klasa gracza
 class Player : public Entity
 {
+public:
+    // klasa zagnieżdżona Inventory obsługująca ekwipunek gracza
+    class Inventory
+    {
+    private:
+        std::vector<std::shared_ptr<Item>> m_items; // smart pointer który pozwala na przechowywanie różnych podklas w wektorze
+
+        Player *m_owner; // wskaźnik na obiekt gracza będący klasą zewnętrzną ekwipunku, potrzebny do użycia metod zarządzających interfejsem wewnątrz Inventory gracza
+
+    public:
+        Inventory(Player *owner) : m_owner(owner) {}; // konstruktor ustawiający na ownera ekwipunku obiekt zewnętrzny (gracza), potrzebny, żeby przesłać obiekt klasy Player do metod Interface wewnątrz Inventoory
+
+        void addItem(const std::shared_ptr<Item> &item);       // dodawanie przedmiotu do ekwipunku
+        void removeItem(const std::shared_ptr<Item> &item);    // usuwanie przedmiotu z ekwipunku np. przy użyciu
+        bool hasItem(const std::shared_ptr<Item> &item) const; // sprawdza czy przedmiot jest w ekwipunku
+        void listItems() const;                                // wypisuje wszystkie przedmioty, które gracz obecnie posiada
+        // getter itemów
+        std::vector<std::shared_ptr<Item>> getItems() const;
+    };
+
 private:
     const std::string m_playerName;
+    Inventory m_inventory; // prywatny ekwipunek dla gracza
 
 public:
     Player(std::string className, int hp, double ms, int MAX_HP = 100, std::string playerName = "Me")
-        : Entity(className, hp, ms, MAX_HP), m_playerName(playerName) {}
+        : Entity(className, hp, ms, MAX_HP), m_playerName(playerName), m_inventory(this) {}
 
     // getter wybranego imienia gracza
     const std::string &getPlayerName() const;
@@ -24,10 +45,7 @@ public:
     const std::string &getClassName() const override;
 
     // setter HP, implementacja otrzymywania obrażeń
-    void takeDamage(int damage) override
-    {
-        return Entity::takeDamage(damage);
-    }
+    void takeDamage(int damage) override;
 
     // getter HP
     int getHealthPoints() const override
@@ -55,27 +73,9 @@ public:
 
     ~Player() = default;
 
-    // klasa zagnieżdżona Inventory obsługująca ekwipunek gracza
-    class Inventory
-    {
-    private:
-        std::vector<std::shared_ptr<Item>> m_items; // smart pointer który pozwala na przechowywanie różnych podklas w wektorze
-
-    public:
-        void addItem(const std::shared_ptr<Item> &item);       // dodawanie przedmiotu do ekwipunku
-        void removeItem(const std::shared_ptr<Item> &item);    // usuwanie przedmiotu z ekwipunku np. przy użyciu
-        bool hasItem(const std::shared_ptr<Item> &item) const; // sprawdza czy przedmiot jest w ekwipunku
-        void listItems() const;                                // wypisuje wszystkie przedmioty, które gracz obecnie posiada
-        // getter itemów
-        std::vector<std::shared_ptr<Item>> getItems() const;
-    };
-
     const Inventory &getInventory() const; // dostęp do ekwipunku dla funkcji nie modifykujących go
 
     Inventory &getInventory(); // dostęp do ekwipunku
-
-private:
-    Inventory m_inventory; // prywatny ekwipunek dla gracza
 };
 
 #endif

@@ -1,9 +1,13 @@
 #include "Interface.h"
+#include "Player.h"
+#include "StatusEffectManager.h"
+#include "StatusEffect.h"
+#include "Enemy.h"
 
 // wersja Windowsowa z użyciem conio.h
 #if defined(_WIN32) || defined(_WIN64)
 
-void Interface::updatePlayerSection(const Entity &player)
+void Interface::updatePlayerSection(const Player &player)
 {
     // Czyszczenie fragmentu okienka z wyłączeniem granic
     clearArea(1, 1, PLAYER_BOX_WIDTH, OPTIONS_BOX_HEIGHT);
@@ -45,25 +49,25 @@ void Interface::drawBorders()
     }
 }
 
-void Interface::updateEnemySection(const Entity &entity)
+void Interface::updateEnemySection(const Enemy &enemy)
 {
     // Czyści obszar
     clearArea(PLAYER_BOX_WIDTH + 1, 1, ENEMY_BOX_WIDTH - 1, OPTIONS_BOX_HEIGHT - 1);
 
     // Jeśli enemy umarł
-    if (entity.getHealthPoints() < 0)
+    if (enemy.getHealthPoints() < 0)
         return;
 
     gotoxy(PLAYER_BOX_WIDTH + 2, 1);
     std::cout << "MONSTER";
 
     gotoxy(PLAYER_BOX_WIDTH + 2, 3);
-    std::cout << entity.getClassName() << " has " << entity.getHealthPoints() << "/" << entity.getMaxHEALTH() << " hp";
+    std::cout << enemy.getClassName() << " has " << enemy.getHealthPoints() << "/" << enemy.getMaxHEALTH() << " hp";
 
     gotoxy(PLAYER_BOX_WIDTH + 2, 5);
     std::cout << "StatusEffects:";
 
-    const auto effects = entity.getActiveEffects();
+    const auto effects = enemy.getActiveEffects();
 
     for (size_t i = 0; i < effects.size() && i < 5; i++)
     {

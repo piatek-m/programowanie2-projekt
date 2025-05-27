@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Interface.h"
 #include <algorithm>
 
 // getter imienia
@@ -10,6 +11,12 @@ const std::string &Player::getPlayerName() const
 const std::string &Player::getClassName() const
 {
     return Player::getPlayerName();
+}
+
+void Player::takeDamage(int damage)
+{
+    return Entity::takeDamage(damage);
+    Interface::updatePlayerSection(*this);
 }
 
 // dostęp do ekwipunku BEZ MODYFIKACJI
@@ -28,6 +35,8 @@ Player::Inventory &Player::getInventory()
 void Player::Inventory::addItem(const std::shared_ptr<Item> &item)
 {
     m_items.push_back(item);
+    Interface::updateInventorySection(*m_owner);
+    Interface::updateOptionsSection(*m_owner);
 }
 
 // usuwanie przedmiotu
@@ -40,6 +49,8 @@ void Player::Inventory::removeItem(const std::shared_ptr<Item> &item)
         if (**it == *item)
         {
             m_items.erase(it);
+            Interface::updateInventorySection(*m_owner);
+            Interface::updateOptionsSection(*m_owner);
             break; // przerywamy po usunięciu (czyli usunie tylko 1 item danego typu!)
         }
     }
