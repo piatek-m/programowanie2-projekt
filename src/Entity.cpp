@@ -15,9 +15,13 @@ const int Entity::getMaxHEALTH() const
     return MAX_HEALTH_POINTS;
 }
 
-double Entity::getMoveSpeed() const
+int Entity::attack(Entity &target, std::mt19937 &gen)
 {
-    return moveSpeed;
+    std::uniform_int_distribution<> damageDist(2, 5);
+    int damage = damageDist(gen);
+    target.takeDamage(damage);
+
+    return damage;
 }
 
 void Entity::takeDamage(int damage)
