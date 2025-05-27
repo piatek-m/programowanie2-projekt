@@ -2,6 +2,7 @@
 #define LIFESTEALER_H
 
 #include "Enemy.h"
+#include <random>
 
 // klasa przeciwnika kradnącego życie gracza
 class Lifestealer : public Enemy
