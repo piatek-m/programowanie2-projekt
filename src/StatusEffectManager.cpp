@@ -38,6 +38,7 @@ void StatusEffectManager::addEffect(const StatusEffect &effect)
     // jesli nie jest nałożony to dodaje efekt
     activeEffects.push_back(effect);
     Interface::getLogMessages().push_back(m_managedEntity->getClassName() + " received effect " + effect.getStatusEffectName() + ". ");
+    Interface::updateMessagesSection();
 }
 
 void StatusEffectManager::removeEffect(StatusEffectType type)
@@ -57,6 +58,7 @@ void StatusEffectManager::removeEffect(StatusEffectType type)
                        }),
         activeEffects.end());
     Interface::getLogMessages().push_back(m_managedEntity->getClassName() + " lost effect " + statusEffectTypeToString(type) + ". ");
+    Interface::updateMessagesSection();
 }
 
 bool StatusEffectManager::hasEffect(StatusEffectType type) const
@@ -107,6 +109,7 @@ void StatusEffectManager::updateEffectTime(int deltaTime)
     for (StatusEffectType type : expiredEffects)
     {
         Interface::getLogMessages().push_back(m_managedEntity->getClassName() + " lost effect " + statusEffectTypeToString(type) + ". ");
+        Interface::updateMessagesSection();
     }
 }
 
