@@ -18,31 +18,25 @@ const std::string &Player::getClassName() const
 }
 
 // atak symulujacy podwojny rzut kostka 1d6
-int Player::attack(Enemy &target, std::mt19937 &gen)
+void Player::attack(Enemy &target, std::mt19937 &gen)
 {
+    Interface::addLogMessage("To hit the enemy you must roll at least 3.");
+    Interface::addLogMessage("[ Press Enter to roll the attack dice ]");
+    Interface::Pause();
+
     std::uniform_int_distribution<> dice(1, 6);
     int firstRoll = dice(gen);
 
-    Interface::addLogMessage("To hit the enemy you must roll at least 3.");
-
-    // sprawdź czy gracz ma debuff wetness lub confusion
-    bool hasWetness = false;
-    bool hasConfusion = false;
-
-    for (const auto &effect : m_statusEffects)
+    if (firstRoll < 3)
     {
-        if (effect.m_effectType == StatusEffectType::wetness)
-        {
-            hasWetness = true;
-        }
-        else if (effect.m_effectType == StatusEffectType::confusion)
-        {
-            hasConfusion = true;
-        }
+        Interface::addLogMessage("You missed the enemy :c");
+        Interface::addLogMessage("[ Press Enter to continue ]");
+        Interface::Pause();
+        return;
     }
 
-    // jeśli gracz ma efekt wetness
-    if (hasWetness)
+    // jeśli gracz ma efekt wetness to trudniej mu trafić
+    if (this->hasStatus(StatusEffectType::wetness))
     {
         firstRoll = std::max(1, firstRoll - 1); // zapewnia że wynik nie będzie mniejszy niż 1
     }
@@ -53,38 +47,46 @@ int Player::attack(Enemy &target, std::mt19937 &gen)
     // jeśli wynik pierwszego rzutu jest mniejszy niż 3 atak nie trafia
     if (firstRoll >= 3)
     {
+        Interface::addLogMessage("[ Now press Enter to roll the damage dice ]");
+        Interface::Pause();
 
-        // jeśli gracz ma efekt confusion
+        int damageRoll = dice(gen);
+
+        bool hasConfusion = this->hasStatus(StatusEffectType::confusion);
+        bool hitSelf = false;
+
+        // jeśli gracz ma efekt confusion to ma szanse na zaatakowanie siebie
         if (hasConfusion)
         {
             int confusionRoll = dice(gen);
-            if (confusionRoll < 3)
-            {
-                Interface::addLogMessage("You have the effect confusion thus you hit yourself.");
-                // gracz zadaje obrażenia sobie
-                int selfDamage = dice(gen);
-                player.takeDamage(selfDamage);
-                return selfDamage;
-            }
+            // jeżeli wynik na kostce < 3 to gracz trafia siebie
+            hitSelf = (confusionRoll < 3);
         }
-        else
-        {
-            // normalny atak
-            int secondRoll = dice(gen);
-            Interface::addLogMessage("Rolling damage dice...     ");
-            system("pause");
-            target.takeDamage(secondRoll);
 
-            message = std::format("You hit the enemy for {} damage!", secondRoll);
-            Interface::addLogMessage(message);
-            Interface::updateEnemySection(target);
-            return secondRoll;
-        }
-        else
+        if (hitSelf)
         {
-            Interface::addLogMessage("You missed the enemy :c");
-            return 0;
+            // message log
+            message = std::format("You are confused which makes you hit yourself for {} damage.", damageRoll);
+            Interface::addLogMessage(message);
+            Interface::addLogMessage("[ Press Enter to continue ]");
+            Interface::Pause();
+
+            // Atak samego siebie
+            this->takeDamage(damageRoll);
         }
+        else // Jak nie siebie to przeciwnika
+        {
+            target.takeDamage(damageRoll);
+
+            applyOnFireEffect(target); // naklada podpalenie na przeciwnika jezeli sam jest podpalony
+
+            // UI
+            Interface::addLogMessage(std::format("You hit the enemy for {} damage!", damageRoll));
+            Interface::updateEnemySection(target);
+            Interface::addLogMessage("[ Press Enter to continue ]");
+            Interface::Pause();
+        }
+        return;
     }
 }
 
@@ -162,6 +164,7 @@ std::vector<std::shared_ptr<Item>> Player::Inventory::getItems() const
 // bierze decyzję gracza i jeśli kliknięto odpowiedni przycisk to wykonuje daną akcję (atakuje wroga, używa przedmiotu)
 void Player::getPlayerChoice(Enemy &target, std::mt19937 &gen)
 {
+    Interface::addLogMessage("[ Choose one of the options on the left ]");
     char input;
     while (true)
     {
@@ -187,6 +190,7 @@ void Player::getPlayerChoice(Enemy &target, std::mt19937 &gen)
 
             if (choice == 1)
             {
+                Interface::removeLastMessage();
                 this->attack(target, gen);
                 return;
             }
@@ -196,30 +200,25 @@ void Player::getPlayerChoice(Enemy &target, std::mt19937 &gen)
 
                 const auto &items = this->getInventory().getItems();
 
+                // jesli indeks przedmiotu (obliczany z kliknietego klawisza) nie wykracza poza wektor
                 if (index < items.size())
                 {
                     if (items[index]->getItemName() == "Healing")
                     {
-                        items[index]->useItem(*this);
+                        Interface::removeLastMessage();
+                        items[index]->useItem(*this); // przedmiot leczacy uzywa sie na siebie
                         return;
                     }
-                    items[index]->useItem(target);
+                    Interface::removeLastMessage();
+                    items[index]->useItem(target); // przedmioty inne niz leczace uzywa sie na enemy
+                    return;
                 }
             }
         }
-
-        // W, S, Strzałki w górę, w dół
-        if (input == 27)
-        {             // ESC key sequence
-            _getch(); // Skip [
-            char arrow = _getch();
-            // Handle arrow keys if needed
-        }
-
-        // Handle Enter
-        if (input == 13)
-        {
-            return;
-        }
     }
+}
+
+void Player::startTurnActions()
+{
+    Entity::startTurnActions();
 }

@@ -18,19 +18,57 @@ void Enemy::takeDamage(int damage)
     Interface::updateEnemySection(*this);
 }
 
-int Enemy::attack(Player &target, std::mt19937 &gen)
+void Enemy::applySpecificDebuff(Player &target, std::mt19937 &gen)
 {
+    std::uniform_int_distribution<> dice(1, 6);
+    int applyEffectRoll = dice(gen);
+    if (applyEffectRoll > 2)
+        target.addStatusEffect(StatusEffect(debuffType));
+}
+
+void Enemy::attack(Player &target, std::mt19937 &gen)
+{
+    // losowanie obrazen
     std::uniform_int_distribution<> damageDist(2, 5);
     int damage = damageDist(gen);
-    target.takeDamage(damage);
 
-    std::string message = std::format("{} is attacking...     ", this->getClassName());
+    // UI
+    std::string attackerClassName = this->getClassName();
+
+    std::string message = std::format("{} is attacking...     ", attackerClassName);
     Interface::addLogMessage(message);
 
-    message = std::format("They hit you for: {} damage.", damage);
-    Interface::addLogMessage(message);
+    Interface::addLogMessage("[ Press Enter to continue ]");
+    Interface::Pause();
 
     target.takeDamage(damage);
 
-    return damage;
+    message = std::format("{} hits you for: {}.", attackerClassName, damage);
+    Interface::addLogMessage(message);
+
+    // naklada specyficzny dla siebie debuff na gracza (jesli takowy posiada)
+    if (debuffType != StatusEffectType::none)
+        applySpecificDebuff(target, gen);
+
+    // jesli jest podpalon to podpala tez gracza
+    Entity::applyOnFireEffect(target);
+
+    return;
+}
+
+void Enemy::takeFireDamage()
+{
+    // defaultowo damage to 4
+    int fireDamage = 4;
+    if (this->hasStatus(StatusEffectType::onFire))
+    {
+        // jesli potworek ma weakness do ognia to damage = 6
+        if (weakness == StatusEffectType::onFire)
+            fireDamage = 8;
+
+        this->takeDamage(fireDamage);
+        std::string message = std::format("Due to being on fire {} takes {} damage", this->getClassName(), fireDamage);
+        Interface::addLogMessage(message);
+        Interface::Pause();
+    }
 }

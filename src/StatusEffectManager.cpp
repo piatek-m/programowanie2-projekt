@@ -22,6 +22,10 @@ std::string StatusEffectManager::statusEffectTypeToString(const StatusEffectType
 
 void StatusEffectManager::addEffect(const StatusEffect &effect)
 {
+    // jesli nie naklada nic to wyjdz
+    if (effect.m_effectType == StatusEffectType::none)
+        return;
+
     // jeśli efekt jest już nałożony to tylko odświeża czas trwania
 
     // dla każdego efektu w wektorze aktywnych efektów
@@ -37,8 +41,9 @@ void StatusEffectManager::addEffect(const StatusEffect &effect)
     }
     // jesli nie jest nałożony to dodaje efekt
     activeEffects.push_back(effect);
-    Interface::getLogMessages().push_back(m_managedEntity->getClassName() + " received effect " + effect.getStatusEffectName() + ". ");
-    Interface::updateMessagesSection();
+
+    // update interfejsu
+    Interface::addLogMessage(m_managedEntity->getClassName() + " received effect " + effect.getStatusEffectName() + ". ");
 }
 
 void StatusEffectManager::removeEffect(StatusEffectType type)
@@ -57,8 +62,7 @@ void StatusEffectManager::removeEffect(StatusEffectType type)
                            return e.m_effectType == type;
                        }),
         activeEffects.end());
-    Interface::getLogMessages().push_back(m_managedEntity->getClassName() + " lost effect " + statusEffectTypeToString(type) + ". ");
-    Interface::updateMessagesSection();
+    Interface::addLogMessage(m_managedEntity->getClassName() + " lost effect " + statusEffectTypeToString(type) + ". ");
 }
 
 bool StatusEffectManager::hasEffect(StatusEffectType type) const
@@ -108,7 +112,7 @@ void StatusEffectManager::updateEffectTime(int deltaTime)
 
     for (StatusEffectType type : expiredEffects)
     {
-        Interface::getLogMessages().push_back(m_managedEntity->getClassName() + " lost effect " + statusEffectTypeToString(type) + ". ");
+        Interface::addLogMessage(m_managedEntity->getClassName() + " lost effect " + statusEffectTypeToString(type) + ". ");
         Interface::updateMessagesSection();
     }
 }

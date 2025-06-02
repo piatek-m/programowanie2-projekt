@@ -1,5 +1,15 @@
 #include "Interface.h"
 
+const int Interface::getScreenWidth()
+{
+    return SCREEN_WIDTH;
+}
+
+const int Interface::getScreenHeight()
+{
+    return SCREEN_HEIGHT;
+}
+
 // wersja Windowsowa z użyciem conio.h
 #if defined(_WIN32) || defined(_WIN64)
 
