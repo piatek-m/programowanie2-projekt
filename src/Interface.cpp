@@ -10,13 +10,46 @@
 int Interface::messageScrollOffset = 0;
 std::vector<std::string> Interface::logMessages;
 
-void Interface::printCentered(const std::string &text, int consoleWidth)
+void Interface::printCentered(const std::string &text)
 {
-    int padding = (consoleWidth - static_cast<int>(text.length())) / 2;
-    if (padding < 0)
-        padding = 0;
+    int padding = (SCREEN_WIDTH - static_cast<int>(text.length())) / 2;
 
     std::cout << std::setw(padding + text.length()) << text << std::endl;
+}
+
+void Interface::Pause(const std::string &text, TextAlign align, bool popMessageVector)
+{
+    if (align == TextAlign::Center)
+    {
+        int padding = (SCREEN_WIDTH - static_cast<int>(text.length())) / 2;
+        std::cout << std::setw(padding + static_cast<int>(text.length())) << text << std::endl;
+    }
+    else
+    {
+        std::cout << text << std::endl;
+    }
+
+    // jesli nacisnieto Enter to odpauzuj
+    int input;
+    while (true && input != 13)
+    {
+        input = _getch();
+
+        if (input == 'j' || input == 'J')
+        {
+            Interface::scrollMessagesUp();
+            continue; // scrollowanie nie przerywa
+        }
+
+        if (input == 'k' || input == 'K')
+        {
+            Interface::scrollMessagesDown();
+            continue; // scrollowanie nie przerywa
+        }
+    }
+    if (popMessageVector == true)
+        logMessages.pop_back();
+    return;
 }
 
 void Interface::drawBorders()
@@ -93,7 +126,7 @@ void Interface::updatePlayerSection(const Player &player)
     for (size_t i = 0; i < effects.size() && i < 5; i++)
     {
         gotoxy(2, 6 + i);
-        std::cout << "- " << effects[i].getStatusEffectName() << " (" << effects[i].remainingDuration << "turns)";
+        std::cout << "- " << effects[i].getStatusEffectName() << " (" << effects[i].remainingDuration << " turns left)";
     }
 }
 
@@ -148,22 +181,19 @@ void Interface::updateControlsSection()
     gotoxy(ACTION_BOX_WIDTH + INVENTORY_BOX_WIDTH + 2, 1);
     std::cout << "Controls:";
 
-    gotoxy(ACTION_BOX_WIDTH + INVENTORY_BOX_WIDTH + 2, 3);
-    std::cout << "W/Arrow Up - option above";
-
     gotoxy(ACTION_BOX_WIDTH + INVENTORY_BOX_WIDTH + 2, 4);
-    std::cout << "S/Arrow Down - option below";
-
-    gotoxy(ACTION_BOX_WIDTH + INVENTORY_BOX_WIDTH + 2, 5);
-    std::cout << "1-9 - select option";
+    std::cout << "1 - Attack";
 
     gotoxy(ACTION_BOX_WIDTH + INVENTORY_BOX_WIDTH + 2, 6);
-    std::cout << "Enter - confirm selection";
+    std::cout << "2-9 - Use item";
 
     gotoxy(ACTION_BOX_WIDTH + INVENTORY_BOX_WIDTH + 2, 8);
+    std::cout << "Enter - continue";
+
+    gotoxy(ACTION_BOX_WIDTH + INVENTORY_BOX_WIDTH + 2, 10);
     std::cout << "J - scroll message log up";
 
-    gotoxy(ACTION_BOX_WIDTH + INVENTORY_BOX_WIDTH + 2, 9);
+    gotoxy(ACTION_BOX_WIDTH + INVENTORY_BOX_WIDTH + 2, 11);
     std::cout << "K - scroll message log down";
 }
 
@@ -233,6 +263,11 @@ void Interface::updateMessagesSection()
         }
         std::cout << "> " << message;
     }
+}
+
+void Interface::removeLastMessage()
+{
+    Interface::logMessages.pop_back();
 }
 
 void Interface::addLogMessage(std::string message)
