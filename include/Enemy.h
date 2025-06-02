@@ -51,11 +51,16 @@ public:
     */
 
     // defaultowy atak dla wszystkich przeciwnikow
-    virtual int attack(Player &target, std::mt19937 &gen);
+    virtual void attack(Player &target, std::mt19937 &gen);
 
     const StatusEffectType &getSelfWeakness() const; // getter podatności na dany typ obrażeń
 
     const StatusEffectType &getOnHitDebuffType() const; // getter typu nakładanego debuffa
+
+    void takeFireDamage() override;
+
+    // naklada efekt (debuff) wlasciwy dla siebie na gracza
+    void applySpecificDebuff(Player &target, std::mt19937 &gen);
 };
 
 #endif

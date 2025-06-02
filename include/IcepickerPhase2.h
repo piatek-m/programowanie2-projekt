@@ -10,11 +10,7 @@ public:
     IcepickerPhase2()
         : Icepicker("Icepicker Meltdown", 20, 40, StatusEffectType::onFire, StatusEffectType::wetness) {}
 
-    std::unique_ptr<Icepicker> phaseChange() override
-    {
-        std::cout << "Icepicker kompletnie się rozpływa!" << std::endl;
-        return nullptr; // nie ma już kolejnej fazy więc zwraca nullptr
-    }
+    std::unique_ptr<Icepicker> phaseChange() override;
 };
 
 #endif

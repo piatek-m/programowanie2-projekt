@@ -29,6 +29,13 @@ class Enemy;
 
 #endif
 
+// enum uzywany w funkcji Pause()
+enum class TextAlign
+{
+    Left,
+    Center
+};
+
 class Interface
 {
 private:
@@ -52,6 +59,7 @@ private:
     static const int MAX_VISIBLE_MESSAGES = (MESSAGE_BOX_HEIGHT - 3) / 2; // Ile wiadomości widać na raz w dzienniczku
     static std::vector<std::string> logMessages;                          // Wiadomości w dzienniczku
 
+public:
     /*
         Funkcje pomocnicze zdefiniowane w
             InterfaceUtils.cpp
@@ -69,13 +77,22 @@ private:
     // Funkcja pomocnicza czyszcząca obszar (do czyszczenia okienek)
     static void clearArea(int x, int y, int width, int height);
 
-public:
+    // getter szerokości ekranu
+    static const int getScreenWidth();
+
+    // getter wysokości ekranu
+    static const int getScreenHeight();
+
     /*
         Funkcje zdefiniowane
             w Interface.cpp
     */
 
-    static void printCentered(const std::string &text, int consoleWidth = SCREEN_WIDTH);
+    // wyświetla tekst na horyzontalnym środku ekranu
+    static void printCentered(const std::string &text);
+
+    // pauzuje gre az do momentu nacisniecai przycisku, wyswietla tekst oraz moze go wycentrowac
+    static void Pause(const std::string &text = "", TextAlign = TextAlign::Left, bool popMessageVector = true);
 
     // Funkcja updateująca fragment UI Gracza
     static void updatePlayerSection(const Player &player);
@@ -99,6 +116,8 @@ public:
 
     // Dodaje wiadomość do wektora dzienniczka
     static void addLogMessage(std::string message);
+
+    static void removeLastMessage();
 
     // Getter wektora dzienniczka
     static std::vector<std::string> getLogMessages();

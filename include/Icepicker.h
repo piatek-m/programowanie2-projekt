@@ -11,6 +11,12 @@ public:
         : Enemy(className, hp, MAX_HP, weak, debuff) {}
 
     virtual std::unique_ptr<Icepicker> phaseChange() = 0; // zwraca nowy obiekt
+
+    void startTurnActions() override
+    {
+        Entity::startTurnActions();
+    }
+
     virtual ~Icepicker() = default;
 };
 

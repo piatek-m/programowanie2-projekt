@@ -4,7 +4,7 @@
 #include "StatusEffectManager.h" // buffy i debuffy
 #include <iostream>
 #include <functional> // callback
-#include <random> // std::mt19937
+#include <random>     // std::mt19937
 
 // klasa bazowa dla wszystkich entity - gracza, przeciwników
 class Entity
@@ -20,16 +20,17 @@ private:
 
     // std::function<void(const Entity &)> onUpdate; -> zamieniono metody interfejsu na static więc dla uproszczenia wyrzucono lambdy i callbacki z kodu, zostają skomentowane jako "notatki"
 
-    StatusEffectManager statusManager; // obiekt odpowiedzialny za zarządzanie efektami
+    StatusEffectManager m_statusManager; // obiekt odpowiedzialny za zarządzanie efektami
 
 protected:
     // chroniony setter do HP
-    void setHealthPoints(int hp) {
+    void setHealthPoints(int hp)
+    {
         healthPoints = std::clamp(hp, 0, MAX_HEALTH_POINTS);
     }
 
 public:
-    Entity(std::string className, int hp, int MAX_HP = 40) : m_className(className), healthPoints(hp), MAX_HEALTH_POINTS(MAX_HP) {};
+    Entity(std::string className, int hp, int MAX_HP = 40) : m_className(className), healthPoints(hp), MAX_HEALTH_POINTS(MAX_HP), m_statusManager(this) {};
 
     // getter nazwy klasy
     virtual const std::string &getClassName() const = 0;
@@ -48,9 +49,6 @@ public:
     // getter maksymalnego HP
     virtual const int getMaxHEALTH() const = 0;
 
-    // naklada efekt na target
-    virtual void applyEffect(Entity &target) = 0;
-
     virtual ~Entity() = default;
 
     // zarządzanie efektami oddelegowane do StatusEffectManager
@@ -58,43 +56,41 @@ public:
     // dodaje efekt
     void addStatusEffect(const StatusEffect &effect)
     {
-        statusManager.addEffect(effect);
+        m_statusManager.addEffect(effect);
     }
 
     // usuwa efekt
     void removeStatusEffect(StatusEffectType type)
     {
-        statusManager.removeEffect(type);
+        m_statusManager.removeEffect(type);
     }
 
     // sprawdza, czy ma dany efekt
     bool hasStatus(StatusEffectType type) const
     {
-        return statusManager.hasEffect(type);
+        return m_statusManager.hasEffect(type);
     }
 
-    // nadpisuje czas trwania posiadanego efektu
+    // nadpisuje czas trwania wszystkich posiadanych efektu
     void updateEffectTime(int deltaTime)
     {
-        statusManager.updateEffectTime(deltaTime);
+        m_statusManager.updateEffectTime(deltaTime);
     }
 
     // getter aktywnych efektow
     std::vector<StatusEffect> getActiveEffects() const
     {
-        return statusManager.getActiveEffects();
+        return m_statusManager.getActiveEffects();
     }
 
-    // status onFire
-    void applyOnFireEffect()
-    {
-        if (hasStatus(StatusEffectType::onFire))
-        {
-            // Zadanie obrażeń
-            int fireDamage = 1;
-            takeDamage(fireDamage);
-    }
-}    
+    // rozprzestrzenianie się ognia, jesli atakujący ma onFire to przekazuje go celowi
+    void applyOnFireEffect(Entity &target);
+
+    // jeśli entity jest podpalone to otrzymuje damage
+    virtual void takeFireDamage();
+
+    // rzeczy do wykonania na poczatku tury, np. takeFireDamage, takeIllumDamage, etc.
+    virtual void startTurnActions() = 0;
 };
 
 #endif

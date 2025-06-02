@@ -21,8 +21,7 @@ public:
         std::vector<std::shared_ptr<Item>> m_items; // smart pointer który pozwala na przechowywanie różnych podklas w wektorze
 
         Player *m_owner; // wskaźnik na obiekt gracza będący obiektem zewnętrznym ekwipunku, potrzebny do użycia metod zarządzających interfejsem wewnątrz metod Inventory (normalnie Inventory nie ma dostępu do wskaźnika "this" klasy Player)
-    protected:
-        StatusEffectType m_effectType;
+
     public:
         Inventory(Player *owner) : m_owner(owner) {}; // konstruktor ustawiający na ownera ekwipunku obiekt zewnętrzny (gracza), potrzebny, żeby przesłać obiekt klasy Player do metod Interface wewnątrz Inventory
 
@@ -49,7 +48,7 @@ public:
     const std::string &getClassName() const override;
 
     // atak symulujacy podwojny rzut kostka 1d6
-    int attack(Enemy &target, std::mt19937 &gen);
+    void attack(Enemy &target, std::mt19937 &gen);
 
     // setter HP, implementacja otrzymywania obrażeń
     void takeDamage(int damage) override;
@@ -69,13 +68,7 @@ public:
     // bierze decyzję gracza i jeśli kliknięto odpowiedni przycisk to wykonuje daną akcję (atakuje wroga, używa przedmiotu)
     void getPlayerChoice(Enemy &target, std::mt19937 &gen);
 
-    /* DEBUG HERE
-    // naklada efekt na target
-    void applyEffect(Entity &target) override
-    {
-        return Entity::applyEffect(target);
-    }
-    */
+    void startTurnActions() override;
 
     ~Player() = default;
 

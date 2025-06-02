@@ -10,11 +10,7 @@ public:
     IcepickerPhase1()
         : Icepicker("Icepicker", 40, 50) {}
 
-    std::unique_ptr<Icepicker> phaseChange() override
-    {
-        std::cout << "Icepicker topi się i przechodzi do fazy 2!" << std::endl;
-        return std::make_unique<IcepickerPhase2>(); // zwraca nowy obiekt IcepickerPhase2
-    }
+    std::unique_ptr<Icepicker> phaseChange() override;
 };
 
 #endif
