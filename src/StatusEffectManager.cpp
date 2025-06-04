@@ -43,7 +43,11 @@ void StatusEffectManager::addEffect(const StatusEffect &effect)
     activeEffects.push_back(effect);
 
     // update interfejsu
-    Interface::addLogMessage(m_managedEntity->getClassName() + " received effect " + effect.getStatusEffectName() + ". ");
+    Interface::addLogMessage(m_managedEntity->getClassName() + " received effect \e[1m" + effect.getStatusEffectName() + "\e[0m. ");
+
+    // eyesore mowi ze go boli
+    if (m_managedEntity->getClassName() == "Eyesore" && effect.getStatusEffectName() == "Illumination")
+        Interface::addLogMessage(std::format("\e[31maARrrEEE YOU CraAZZY?? ... iThh hURTS\e[0m"));
 }
 
 void StatusEffectManager::removeEffect(StatusEffectType type)
@@ -62,7 +66,7 @@ void StatusEffectManager::removeEffect(StatusEffectType type)
                            return e.m_effectType == type;
                        }),
         activeEffects.end());
-    Interface::addLogMessage(m_managedEntity->getClassName() + " lost effect " + statusEffectTypeToString(type) + ". ");
+    Interface::addLogMessage(m_managedEntity->getClassName() + " lost effect \e[1m" + statusEffectTypeToString(type) + "\e[0m. ");
 }
 
 bool StatusEffectManager::hasEffect(StatusEffectType type) const
@@ -112,7 +116,7 @@ void StatusEffectManager::updateEffectTime(int deltaTime)
 
     for (StatusEffectType type : expiredEffects)
     {
-        Interface::addLogMessage(m_managedEntity->getClassName() + " lost effect " + statusEffectTypeToString(type) + ". ");
+        Interface::addLogMessage(m_managedEntity->getClassName() + " lost effect \e[1m" + statusEffectTypeToString(type) + "\e[0m. ");
         Interface::updateMessagesSection();
     }
 }

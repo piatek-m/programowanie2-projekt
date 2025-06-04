@@ -27,6 +27,8 @@ public:
     // użycie itemu, wykonuje daną akcję itemu zdefiniowaną w klasach dziedziczących oraz usuwa użyty przedmiot z inventory (implementować w dziedziczących)
     virtual void useItem(Entity &target) = 0;
 
+    virtual void useItem(Player &player);
+
     // wirtualny dekonstruktor
     virtual ~Item() = default;
 };

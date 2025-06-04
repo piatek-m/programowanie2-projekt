@@ -12,20 +12,19 @@ private:
     int m_healAmount;
 
 public:
-    HealingItem(const std::string &iname = "Healing", int heal = 10)
+    HealingItem(const std::string &iname = "Potion of Healing", int heal = 10)
         : Item(iname), m_healAmount(heal) {}
 
     // zwraca ile punktów zdrowia leczy przedmiot
     int getHealAmount() const { return m_healAmount; }
 
-    // pusta funkcja
-    void useItem(Entity &target) override
+    void useItem(Entity &entity) override
     {
         return;
     }
 
-    // użycie przedmiotu - leczenie i usunięcie z Inventory
-    void useItem(Player &player);
+    // self-heal
+    void useItem(Player &player) override;
 
     std::string getItemType() const override { return "Healing"; }
 };

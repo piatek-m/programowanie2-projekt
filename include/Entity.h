@@ -54,13 +54,13 @@ public:
     // zarządzanie efektami oddelegowane do StatusEffectManager
 
     // dodaje efekt
-    void addStatusEffect(const StatusEffect &effect)
+    virtual void addStatusEffect(const StatusEffect &effect)
     {
         m_statusManager.addEffect(effect);
     }
 
     // usuwa efekt
-    void removeStatusEffect(StatusEffectType type)
+    virtual void removeStatusEffect(StatusEffectType type)
     {
         m_statusManager.removeEffect(type);
     }
@@ -72,7 +72,7 @@ public:
     }
 
     // nadpisuje czas trwania wszystkich posiadanych efektu
-    void updateEffectTime(int deltaTime)
+    virtual void updateEffectTime(int deltaTime)
     {
         m_statusManager.updateEffectTime(deltaTime);
     }

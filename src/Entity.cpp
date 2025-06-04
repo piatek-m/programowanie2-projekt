@@ -50,7 +50,7 @@ void Entity::takeFireDamage()
     {
         this->takeDamage(4);
         this->takeDamage(fireDamage);
-        std::string message = std::format("Due to being on fire {} takes {} damage", this->getClassName(), fireDamage);
+        std::string message = std::format("Due to being on fire {} takes \e[1m{}\e[0m damage", this->getClassName(), fireDamage);
         Interface::addLogMessage(message);
         Interface::Pause();
     }

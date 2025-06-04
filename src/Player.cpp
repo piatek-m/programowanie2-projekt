@@ -2,6 +2,7 @@
 #include "Entity.h"
 #include "Interface.h"
 #include "Enemy.h"
+#include "HealingItem.h"
 
 #include <algorithm>
 #include <random> // std::mt19937
@@ -21,7 +22,7 @@ const std::string &Player::getClassName() const
 void Player::attack(Enemy &target, std::mt19937 &gen)
 {
     Interface::addLogMessage("To hit the enemy you must roll at least 3.");
-    Interface::addLogMessage("[ Press Enter to roll the attack dice ]");
+    Interface::addLogMessage("[ \e[33mPress Enter to roll the attack dice\e[0m ]");
     Interface::Pause();
 
     std::uniform_int_distribution<> dice(1, 6);
@@ -30,7 +31,7 @@ void Player::attack(Enemy &target, std::mt19937 &gen)
     if (firstRoll < 3)
     {
         Interface::addLogMessage("You missed the enemy :c");
-        Interface::addLogMessage("[ Press Enter to continue ]");
+        Interface::addLogMessage("[ \e[33mPress Enter to continue \e[0m]");
         Interface::Pause();
         return;
     }
@@ -41,13 +42,13 @@ void Player::attack(Enemy &target, std::mt19937 &gen)
         firstRoll = std::max(1, firstRoll - 1); // zapewnia że wynik nie będzie mniejszy niż 1
     }
 
-    std::string message = std::format("You rolled: {}.", firstRoll);
+    std::string message = std::format("You rolled: \e[1m{}\e[0m.", firstRoll);
     Interface::addLogMessage(message);
 
     // jeśli wynik pierwszego rzutu jest mniejszy niż 3 atak nie trafia
     if (firstRoll >= 3)
     {
-        Interface::addLogMessage("[ Now press Enter to roll the damage dice ]");
+        Interface::addLogMessage("[ \e[33mNow press Enter to roll the damage dice\e[0m ]");
         Interface::Pause();
 
         int damageRoll = dice(gen);
@@ -66,9 +67,9 @@ void Player::attack(Enemy &target, std::mt19937 &gen)
         if (hitSelf)
         {
             // message log
-            message = std::format("You are confused which makes you hit yourself for {} damage.", damageRoll);
+            message = std::format("You are confused which makes you hit yourself for \e[1m{}\e[0m damage.", damageRoll);
             Interface::addLogMessage(message);
-            Interface::addLogMessage("[ Press Enter to continue ]");
+            Interface::addLogMessage("[ \e[33mPress Enter to continue\e[0m ]");
             Interface::Pause();
 
             // Atak samego siebie
@@ -81,9 +82,9 @@ void Player::attack(Enemy &target, std::mt19937 &gen)
             applyOnFireEffect(target); // naklada podpalenie na przeciwnika jezeli sam jest podpalony
 
             // UI
-            Interface::addLogMessage(std::format("You hit the enemy for {} damage!", damageRoll));
+            Interface::addLogMessage(std::format("You hit the enemy for \e[1m{}\e[0m damage!", damageRoll));
             Interface::updateEnemySection(target);
-            Interface::addLogMessage("[ Press Enter to continue ]");
+            Interface::addLogMessage("[ \e[33mPress Enter to continue\e[0m ]");
             Interface::Pause();
         }
         return;
@@ -114,6 +115,7 @@ void Player::Inventory::addItem(const std::shared_ptr<Item> &item)
     m_items.push_back(item);
     Interface::updateInventorySection(*m_owner);
     Interface::updateOptionsSection(*m_owner);
+    Interface::addLogMessage(std::format("You found a \e[1m{}\e[0m!", item->getItemName()));
 }
 
 // usuwanie przedmiotu
@@ -164,7 +166,7 @@ std::vector<std::shared_ptr<Item>> Player::Inventory::getItems() const
 // bierze decyzję gracza i jeśli kliknięto odpowiedni przycisk to wykonuje daną akcję (atakuje wroga, używa przedmiotu)
 void Player::getPlayerChoice(Enemy &target, std::mt19937 &gen)
 {
-    Interface::addLogMessage("[ Choose one of the options on the left ]");
+    Interface::addLogMessage("[ \e[33mChoose one of the options on the left \e[0m]");
     char input;
     while (true)
     {
@@ -201,16 +203,14 @@ void Player::getPlayerChoice(Enemy &target, std::mt19937 &gen)
                 const auto &items = this->getInventory().getItems();
 
                 // jesli indeks przedmiotu (obliczany z kliknietego klawisza) nie wykracza poza wektor
-                if (index < items.size())
+                if (items[index]->getItemType() == "Healing")
                 {
-                    if (items[index]->getItemName() == "Healing")
-                    {
-                        Interface::removeLastMessage();
-                        items[index]->useItem(*this); // przedmiot leczacy uzywa sie na siebie
-                        return;
-                    }
-                    Interface::removeLastMessage();
-                    items[index]->useItem(target); // przedmioty inne niz leczace uzywa sie na enemy
+                    items[index]->useItem(*this); // przeładowanie z parametrem gracza
+                    return;
+                }
+                else
+                {
+                    items[index]->useItem(target); // przeładowanie z entity
                     return;
                 }
             }
@@ -221,4 +221,24 @@ void Player::getPlayerChoice(Enemy &target, std::mt19937 &gen)
 void Player::startTurnActions()
 {
     Entity::startTurnActions();
+}
+
+void Player::addStatusEffect(const StatusEffect &effect)
+{
+    Entity::addStatusEffect(effect);
+    Interface::updatePlayerSection(*this);
+}
+
+// usuwa efekt
+void Player::removeStatusEffect(StatusEffectType type)
+{
+    Entity::removeStatusEffect(type);
+    Interface::updatePlayerSection(*this);
+}
+
+// nadpisuje czas trwania wszystkich posiadanych efektu
+void Player::updateEffectTime(int deltaTime)
+{
+    Entity::updateEffectTime(deltaTime);
+    Interface::updatePlayerSection(*this);
 }

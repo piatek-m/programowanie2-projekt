@@ -116,7 +116,7 @@ void Interface::updatePlayerSection(const Player &player)
     std::cout << player.getClassName();
 
     gotoxy(2, 3);
-    std::cout << player.getClassName() << " has " << player.getHealthPoints() << "/" << player.getMaxHEALTH() << " hp";
+    std::cout << "\e[32m" << player.getClassName() << "\e[0m has \e[1m" << player.getHealthPoints() << "\e[0m/" << player.getMaxHEALTH() << "\e[0m hp";
 
     gotoxy(2, 5);
     std::cout << "StatusEffects:";
@@ -126,7 +126,7 @@ void Interface::updatePlayerSection(const Player &player)
     for (size_t i = 0; i < effects.size() && i < 5; i++)
     {
         gotoxy(2, 6 + i);
-        std::cout << "- " << effects[i].getStatusEffectName() << " (" << effects[i].remainingDuration << " turns left)";
+        std::cout << "- \e[33m" << effects[i].getStatusEffectName() << "\e[0m (" << effects[i].remainingDuration << " turns left)";
     }
 }
 
@@ -148,7 +148,7 @@ void Interface::updateEnemySection(const Enemy &enemy)
     std::cout << "MONSTER";
 
     gotoxy(PLAYER_BOX_WIDTH + 2, 3);
-    std::cout << enemy.getClassName() << " has " << enemy.getHealthPoints() << "/" << enemy.getMaxHEALTH() << " hp";
+    std::cout << "\e[31m" << enemy.getClassName() << "\e[0m has \e[1m" << enemy.getHealthPoints() << "\e[0m/" << enemy.getMaxHEALTH() << "\e[0m hp";
 
     gotoxy(PLAYER_BOX_WIDTH + 2, 5);
     std::cout << "StatusEffects:";
@@ -157,8 +157,8 @@ void Interface::updateEnemySection(const Enemy &enemy)
 
     for (size_t i = 0; i < effects.size() && i < 5; i++)
     {
-        gotoxy(2, 6 + i);
-        std::cout << "- " << effects[i].getStatusEffectName() << " (" << effects[i].remainingDuration << "turns)";
+        gotoxy(PLAYER_BOX_WIDTH + 2, 6 + i);
+        std::cout << "- \e[33m" << effects[i].getStatusEffectName() << "\e[0m (" << effects[i].remainingDuration << " turns left)";
     }
 }
 
@@ -169,10 +169,11 @@ void Interface::updateInventorySection(const Player &player)
     gotoxy(PLAYER_BOX_WIDTH + ENEMY_BOX_WIDTH + 2, 1);
     std::cout << "Inventory:";
 
-    for (size_t i = 0; i < player.getInventory().getItems().size() && i < 8; i++)
+    const auto &items = player.getInventory().getItems();
+    for (size_t i = 0; i < items.size() && i < 8; i++)
     {
         gotoxy(PLAYER_BOX_WIDTH + ENEMY_BOX_WIDTH + 2, 2 + i);
-        std::cout << (i + 1) << ". " << player.getInventory().getItems()[i]->getItemName();
+        std::cout << (i + 1) << ". " << items[i]->getItemName();
     }
 }
 
@@ -199,17 +200,21 @@ void Interface::updateControlsSection()
 
 void Interface::updateOptionsSection(const Player &player)
 {
+
     clearArea(1, OPTIONS_BOX_HEIGHT + 1, OPTIONS_BOX_WIDTH - 2, OPTIONS_BOX_HEIGHT - 2);
 
     gotoxy(2, OPTIONS_BOX_HEIGHT + 2);
     std::cout << "Actions:";
 
-    for (size_t i = 0; i <= player.getInventory().getItems().size() && i < 10; i++)
-    {
-        gotoxy(2, OPTIONS_BOX_HEIGHT + 3 + i + 1);
+    gotoxy(2, OPTIONS_BOX_HEIGHT + 3); // Opcja 1 hardcoded jako Attack
+    std::cout << "[1] Attack";
 
-        // dla 1 wypisuje Attack dla reszty itemki
-        std::cout << "[" << (i + 1) << "] " << ((i == 0) ? "Attack" : "Use " + player.getInventory().getItems()[i]->getItemName());
+    const auto &items = player.getInventory().getItems();
+
+    for (size_t i = 0; i < items.size() && i < 8; i++) // max 8 itemow (2-9, ale wsm to mamy 3)
+    {
+        gotoxy(2, OPTIONS_BOX_HEIGHT + 4 + i); // Attack jest na linii 3
+        std::cout << "[" << (i + 2) << "] Use " << items[i]->getItemName();
     }
 }
 

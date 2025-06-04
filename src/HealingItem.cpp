@@ -1,5 +1,7 @@
 #include "HealingItem.h"
 #include "Player.h"
+#include "Interface.h"
+#include "format"
 
 void HealingItem::useItem(Player &player)
 {
@@ -11,5 +13,5 @@ void HealingItem::useItem(Player &player)
     // Otrzymywanie ujemnych obrażeń = leczenie
     player.takeDamage(-(newHP - currentHP));
 
-    player.getInventory().removeItem(std::make_shared<HealingItem>(*this));
+    Interface::addLogMessage(std::format("Potion of healing used! You heal for \e[1m{}\e[0m.", m_healAmount));
 }

@@ -12,7 +12,7 @@ class Lifestealer : public Enemy
 
 public:
     // konstruktor tworzący klasę przeciwnika Lifestealer
-    Lifestealer(std::string className, int hp, int MAX_HP, StatusEffectType weak, StatusEffectType debuff) : Enemy("Lifestealer", 20, 20, StatusEffectType::none, StatusEffectType::none) {};
+    Lifestealer(std::string className = "Lifestealer", int hp = 30, int MAX_HP = 30, StatusEffectType weak = StatusEffectType::none, StatusEffectType debuff = StatusEffectType::none) : Enemy(className, hp, MAX_HP, weak, debuff) {};
 
     void attack(Player &target, std::mt19937 &gen) override;
 

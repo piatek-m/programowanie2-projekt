@@ -42,6 +42,14 @@ public:
         return Entity::getMaxHEALTH();
     }
 
+    void addStatusEffect(const StatusEffect &effect) override;
+
+    // usuwa efekt
+    void removeStatusEffect(StatusEffectType type) override;
+
+    // nadpisuje czas trwania wszystkich posiadanych efektu
+    void updateEffectTime(int deltaTime) override;
+
     /* DEBUG HERE
     // naklada efekt na target
     void applyEffect(Entity &target) override

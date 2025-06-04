@@ -22,7 +22,7 @@ void Enemy::applySpecificDebuff(Player &target, std::mt19937 &gen)
 {
     std::uniform_int_distribution<> dice(1, 6);
     int applyEffectRoll = dice(gen);
-    if (applyEffectRoll > 2)
+    if (applyEffectRoll > 4)
         target.addStatusEffect(StatusEffect(debuffType));
 }
 
@@ -38,12 +38,12 @@ void Enemy::attack(Player &target, std::mt19937 &gen)
     std::string message = std::format("{} is attacking...     ", attackerClassName);
     Interface::addLogMessage(message);
 
-    Interface::addLogMessage("[ Press Enter to continue ]");
+    Interface::addLogMessage("[ \e[33mPress Enter to continue\e[0m ]");
     Interface::Pause();
 
     target.takeDamage(damage);
 
-    message = std::format("{} hits you for: {}.", attackerClassName, damage);
+    message = std::format("{} hits you for: \e[1m{}\e[0m.", attackerClassName, damage);
     Interface::addLogMessage(message);
 
     // naklada specyficzny dla siebie debuff na gracza (jesli takowy posiada)
@@ -67,8 +67,28 @@ void Enemy::takeFireDamage()
             fireDamage = 8;
 
         this->takeDamage(fireDamage);
-        std::string message = std::format("Due to being on fire {} takes {} damage", this->getClassName(), fireDamage);
+        std::string message = std::format("Due to being on fire {} takes \e[1m{}\e[0m damage", this->getClassName(), fireDamage);
         Interface::addLogMessage(message);
         Interface::Pause();
     }
+}
+
+void Enemy::addStatusEffect(const StatusEffect &effect)
+{
+    Entity::addStatusEffect(effect);
+    Interface::updateEnemySection(*this);
+}
+
+// usuwa efekt
+void Enemy::removeStatusEffect(StatusEffectType type)
+{
+    Entity::removeStatusEffect(type);
+    Interface::updateEnemySection(*this);
+}
+
+// nadpisuje czas trwania wszystkich posiadanych efektu
+void Enemy::updateEffectTime(int deltaTime)
+{
+    Entity::updateEffectTime(deltaTime);
+    Interface::updateEnemySection(*this);
 }

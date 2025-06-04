@@ -65,6 +65,14 @@ public:
         return Entity::getMaxHEALTH();
     }
 
+    virtual void addStatusEffect(const StatusEffect &effect);
+
+    // usuwa efekt
+    virtual void removeStatusEffect(StatusEffectType type);
+
+    // nadpisuje czas trwania wszystkich posiadanych efektu
+    virtual void updateEffectTime(int deltaTime);
+
     // bierze decyzję gracza i jeśli kliknięto odpowiedni przycisk to wykonuje daną akcję (atakuje wroga, używa przedmiotu)
     void getPlayerChoice(Enemy &target, std::mt19937 &gen);
 
