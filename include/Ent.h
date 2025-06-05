@@ -10,7 +10,7 @@ public:
     // konstruktor tworzący klasę przeciwnika Ent
     Ent(std::string className = "Ent", int hp = 10, int MAX_HP = 50, StatusEffectType weak = StatusEffectType::onFire, StatusEffectType debuff = StatusEffectType::none) : Enemy(className, hp, MAX_HP, weak) {};
 
-    void startTurnActions() override;
+    void endTurnActions() override;
 };
 
 #endif

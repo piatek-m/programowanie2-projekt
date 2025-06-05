@@ -22,7 +22,7 @@ void Enemy::applySpecificDebuff(Player &target, std::mt19937 &gen)
 {
     std::uniform_int_distribution<> dice(1, 6);
     int applyEffectRoll = dice(gen);
-    if (applyEffectRoll > 4)
+    if (applyEffectRoll > 2)
         target.addStatusEffect(StatusEffect(debuffType));
 }
 
@@ -69,7 +69,6 @@ void Enemy::takeFireDamage()
         this->takeDamage(fireDamage);
         std::string message = std::format("Due to being on fire {} takes \e[1m{}\e[0m damage", this->getClassName(), fireDamage);
         Interface::addLogMessage(message);
-        Interface::Pause();
     }
 }
 

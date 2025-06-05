@@ -8,3 +8,12 @@ std::unique_ptr<Icepicker> IcepickerPhase1::phaseChange()
     Interface::Pause();
     return std::make_unique<IcepickerPhase2>(); // zwraca nowy obiekt IcepickerPhase2
 }
+
+void IcepickerPhase1::takeDamage(int damage)
+{
+    Enemy::takeDamage(damage);
+    if (this->getHealthPoints() <= (this->getMaxHEALTH() / 2) && !shouldPhaseChange)
+    {
+        shouldPhaseChange = true;
+    }
+}

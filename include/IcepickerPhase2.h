@@ -8,7 +8,7 @@ class IcepickerPhase2 : public Icepicker
 {
 public:
     IcepickerPhase2()
-        : Icepicker("Icepicker Meltdown", 20, 40, StatusEffectType::onFire, StatusEffectType::wetness) {}
+        : Icepicker("icep;ccer", 10, 40, StatusEffectType::onFire, StatusEffectType::wetness) {}
 
     std::unique_ptr<Icepicker> phaseChange() override;
 };

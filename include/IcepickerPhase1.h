@@ -6,11 +6,21 @@
 // klasa przeciwnika która ma więcej zdrowia ale nie daje debuffów
 class IcepickerPhase1 : public Icepicker
 {
+private:
+    bool shouldPhaseChange = false;
+
 public:
     IcepickerPhase1()
-        : Icepicker("Icepicker", 40, 50) {}
+        : Icepicker("Icepicker", 40, 40) {}
 
     std::unique_ptr<Icepicker> phaseChange() override;
+
+    bool needsPhaseChange() const
+    {
+        return shouldPhaseChange;
+    }
+
+    void takeDamage(int damage) override;
 };
 
 #endif

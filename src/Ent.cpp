@@ -1,7 +1,7 @@
 #include "Ent.h"
 #include "Interface.h"
 
-void Ent::startTurnActions()
+void Ent::endTurnActions()
 {
-    Entity::startTurnActions();
+    Entity::endTurnActions();
 }

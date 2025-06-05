@@ -60,8 +60,8 @@ void Player::attack(Enemy &target, std::mt19937 &gen)
         if (hasConfusion)
         {
             int confusionRoll = dice(gen);
-            // jeżeli wynik na kostce < 3 to gracz trafia siebie
-            hitSelf = (confusionRoll < 3);
+            // jeżeli wynik na kostce < 4 to gracz trafia siebie
+            hitSelf = (confusionRoll < 4);
         }
 
         if (hitSelf)
@@ -202,6 +202,8 @@ void Player::getPlayerChoice(Enemy &target, std::mt19937 &gen)
 
                 const auto &items = this->getInventory().getItems();
 
+                Interface::removeLastMessage(); // usuniecie "Choose one of the options..."
+
                 // jesli indeks przedmiotu (obliczany z kliknietego klawisza) nie wykracza poza wektor
                 if (items[index]->getItemType() == "Healing")
                 {
@@ -218,9 +220,9 @@ void Player::getPlayerChoice(Enemy &target, std::mt19937 &gen)
     }
 }
 
-void Player::startTurnActions()
+void Player::endTurnActions()
 {
-    Entity::startTurnActions();
+    Entity::endTurnActions();
 }
 
 void Player::addStatusEffect(const StatusEffect &effect)

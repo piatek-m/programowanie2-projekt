@@ -16,9 +16,9 @@ public:
 
     void attack(Player &target, std::mt19937 &gen) override;
 
-    void startTurnActions() override
+    void endTurnActions() override
     {
-        Entity::startTurnActions();
+        Entity::endTurnActions();
     }
 };
 

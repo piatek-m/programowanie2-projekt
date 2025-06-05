@@ -90,7 +90,7 @@ public:
     virtual void takeFireDamage();
 
     // rzeczy do wykonania na poczatku tury, np. takeFireDamage, takeIllumDamage, etc.
-    virtual void startTurnActions() = 0;
+    virtual void endTurnActions() = 0;
 };
 
 #endif

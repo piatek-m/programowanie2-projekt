@@ -9,10 +9,10 @@ void Eyesore::takeIllumDamage()
     if (this->hasStatus(StatusEffectType::illumination))
     {
         this->takeDamage(illumDamage);
-        Interface::addLogMessage("\e[31..!!gOoOD LOOordD!!..\e[0m");
+        Interface::addLogMessage("\e[31m..!!gOoOD LOOordD!!..\e[0m");
         std::string message = std::format("Due to being illuminated Eyesore takes \e[1m{}\e[0m damage", illumDamage);
         Interface::addLogMessage(message);
-        Interface::addLogMessage("[ \e[31mEnter to continue\e[0m ]");
+        Interface::addLogMessage("[ \e[33mEnter to continue\e[0m ]");
         Interface::Pause();
     }
 }
@@ -34,7 +34,7 @@ void Eyesore::attack(Player &target, std::mt19937 &gen)
 }
 */
 
-void Eyesore::startTurnActions()
+void Eyesore::endTurnActions()
 {
     takeIllumDamage();
     takeFireDamage();

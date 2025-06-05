@@ -12,9 +12,9 @@ public:
 
     virtual std::unique_ptr<Icepicker> phaseChange() = 0; // zwraca nowy obiekt
 
-    void startTurnActions() override
+    void endTurnActions() override
     {
-        Entity::startTurnActions();
+        Entity::endTurnActions();
     }
 
     virtual ~Icepicker() = default;

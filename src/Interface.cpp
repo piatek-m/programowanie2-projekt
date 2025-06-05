@@ -158,7 +158,7 @@ void Interface::updateEnemySection(const Enemy &enemy)
     for (size_t i = 0; i < effects.size() && i < 5; i++)
     {
         gotoxy(PLAYER_BOX_WIDTH + 2, 6 + i);
-        std::cout << "- \e[33m" << effects[i].getStatusEffectName() << "\e[0m (" << effects[i].remainingDuration << " turns left)";
+        std::cout << "- \e[33m" << effects[i].getStatusEffectName() << "\e[0m (" << effects[i].remainingDuration << ((effects[i].getStatusEffectName() == "Illumination") ? "turn left)" : " turns left)");
     }
 }
 

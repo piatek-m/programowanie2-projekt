@@ -76,7 +76,7 @@ public:
     // bierze decyzję gracza i jeśli kliknięto odpowiedni przycisk to wykonuje daną akcję (atakuje wroga, używa przedmiotu)
     void getPlayerChoice(Enemy &target, std::mt19937 &gen);
 
-    void startTurnActions() override;
+    void endTurnActions() override;
 
     ~Player() = default;
 

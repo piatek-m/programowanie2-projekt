@@ -39,6 +39,7 @@ void Entity::applyOnFireEffect(Entity &target)
 {
     if (this->hasStatus(StatusEffectType::onFire))
     {
+        Interface::addLogMessage(std::format("Due to {} burning, {} catches fire too!", this->getClassName(), target.getClassName()));
         target.addStatusEffect(StatusEffect(StatusEffectType::onFire));
     }
 }
@@ -52,11 +53,12 @@ void Entity::takeFireDamage()
         this->takeDamage(fireDamage);
         std::string message = std::format("Due to being on fire {} takes \e[1m{}\e[0m damage", this->getClassName(), fireDamage);
         Interface::addLogMessage(message);
+        Interface::addLogMessage("[ \e[33mEnter to continue\e[0m ]");
         Interface::Pause();
     }
 }
 
-void Entity::startTurnActions()
+void Entity::endTurnActions()
 {
     takeFireDamage(); // reminder: otrzymuje obrażenia tylko jeśli jest podpalon
     updateEffectTime(1);

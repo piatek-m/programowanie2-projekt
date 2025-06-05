@@ -37,13 +37,13 @@ struct GameOverException : std::exception
 void gameOver()
 {
     system("cls");
-    UI::gotoxy((UI::getScreenWidth() / 2) - 1, 0);
+    UI::gotoxy(0, (UI::getScreenHeight() / 2) - 1);
     UI::Pause("\e[31mG A M E   O V E R !\e[0m", TextAlign::Center, false);
     throw GameOverException{};
 };
 
 // funkcja implementujaca tury w walce
-void Combat(Player &player, Enemy &enemy, mt19937 &gen);
+void Combat(Player &player, std::unique_ptr<Enemy> &enemy, mt19937 &gen);
 
 int main()
 {
@@ -111,10 +111,11 @@ int main()
 
         Interface::Pause();
 
-        Combat(player, *enemy, gen);
+        Combat(player, enemy, gen);
         enemy.reset();
 
-        UI::addLogMessage("\e[35mLet the bullets hit me!\e[0m \e[1mWhat on earth was that?!\e[0m");
+        // otrzymanie latarki
+        UI::addLogMessage("\e[1mLet the bullets hit me! What on earth was that?!\e[0m");
         UI::addLogMessage("[ \e[33mEnter to continue\e[0m ]");
         UI::Pause();
         UI::addLogMessage("\e[1mAh, whatever. I should start looking for a way out of here.\e[0m");
@@ -144,7 +145,7 @@ int main()
         UI::Pause();
 
         // druga walka - z Eyesore
-        std::unique_ptr<Enemy> boloOczy = std::make_unique<Eyesore>();
+        std::unique_ptr<Enemy> boloOczy = std::make_unique<Eyesore>("Eyesore", 15);
         UI::addLogMessage("\e[31mAARGHH!! My EYESS hUrtt sO bADly...\e[0m");
         UI::addLogMessage("[ \e[33mEnter to continue\e[0m ]");
         UI::Pause();
@@ -153,10 +154,14 @@ int main()
         UI::Pause();
         UI::updateEnemySection(*boloOczy);
 
-        Combat(player, *boloOczy, gen);
+        Combat(player, boloOczy, gen);
         boloOczy.reset();
 
-        UI::addLogMessage("A pack of matchsticks falls out of the creature's... eye socket?");
+        // otrzymanie zapałek
+        UI::addLogMessage("A pack of matchsticks falls out of the creature's...");
+        UI::addLogMessage("[ \e[33mEnter to continue\e[0m ]");
+        UI::Pause();
+        UI::addLogMessage("...eye socket? Anyway, you pick it up.");
         UI::addLogMessage("[ \e[33mEnter to continue\e[0m ]");
         UI::Pause();
         player.getInventory().addItem(std::make_shared<FireItem>());
@@ -165,13 +170,19 @@ int main()
         UI::Pause();
 
         // Icepicker wprowadzzenie
-        UI::addLogMessage("Suddenly it gets really cold. Like, REALLY cold. Your nose starts running.");
+        UI::addLogMessage("Suddenly it gets really cold.");
+        UI::addLogMessage("[ \e[33mEnter to continue\e[0m ]");
+        UI::Pause();
+        UI::addLogMessage("Like, REALLY cold.Your nose starts running.");
         UI::addLogMessage("[ \e[33mEnter to continue\e[0m ]");
         UI::Pause();
         UI::addLogMessage(" \e[1mA-psik!\e[0m");
         UI::addLogMessage("[ \e[33mEnter to continue\e[0m ]");
         UI::Pause();
-        UI::addLogMessage("\e[36mHey! Careful with the sneezing! You're spreading germs in my forest!\e[0m");
+        UI::addLogMessage("\e[36mHey!\e[0m");
+        UI::addLogMessage("[ \e[33mEnter to continue\e[0m ]");
+        UI::Pause();
+        UI::addLogMessage("\e[36mCareful with the sneezing! You're spreading germs here!\e[0m");
         UI::addLogMessage("[ \e[33mEnter to continue\e[0m ]");
         UI::Pause();
 
@@ -179,30 +190,32 @@ int main()
         std::unique_ptr<Enemy> icepicker = std::make_unique<IcepickerPhase1>();
         UI::updateEnemySection(*icepicker);
 
-        Combat(player, *icepicker, gen);
+        Combat(player, icepicker, gen);
         icepicker.reset();
 
         // potka leczenia : tu już dalem Claudowi zeby fabule uzupelnil patrzac na moje poprzednie wypociny
-        UI::addLogMessage("The ice melts, revealing... a fancy red potion! Score!");
+        UI::addLogMessage("The ice melts, revealing... a fancy red potion!");
         UI::addLogMessage("[ \e[33mEnter to continue\e[0m ]");
         UI::Pause();
 
         player.getInventory().addItem(std::make_shared<HealingItem>());
         UI::updateInventorySection(player);
 
-        UI::addLogMessage("You pocket the suspicious red liquid. Bottoms up later, right?");
+        UI::addLogMessage("You pocket the suspicious red liquid. Bottoms up later...");
         UI::addLogMessage("[ \e[33mEnter to continue\e[0m ]");
         UI::Pause();
         UI::addLogMessage("Suddenly, a creepy voice whispers from the shadows...");
         UI::addLogMessage("[ \e[33mEnter to continue\e[0m ]");
         UI::Pause();
-        UI::addLogMessage("\e[32mPsst... hey kid... wanna buy some... DEATH?\e[0m");
+        UI::addLogMessage("\e[35mPsst... hey kid... wanna buy some... DEATH?\e[0m");
         UI::addLogMessage("[ \e[33mEnter to continue\e[0m ]");
         UI::Pause();
-        UI::addLogMessage("A sketchy hooded figure emerges. Wait, is that... a vampire MLM salesman?");
+        UI::addLogMessage("A sketchy hooded figure emerges. Wait, is that...");
+        UI::addLogMessage("...a vampire MLM salesman?");
         UI::addLogMessage("[ \e[33mEnter to continue\e[0m ]");
         UI::Pause();
-        UI::addLogMessage("\e[32mI'm the Lifestealer! I heal myself by draining YOU! A win-lose situation!\e[0m");
+        UI::addLogMessage("\e[35mI'm the Lifestealer! I heal myself by draining YOU!\e[0m");
+        UI::addLogMessage("\e[35mA win-lose situation!\e[0m");
         UI::addLogMessage("[ \e[33mEnter to continue\e[0m ]");
         UI::Pause();
 
@@ -210,11 +223,14 @@ int main()
         std::unique_ptr<Enemy> lifestealer = std::make_unique<Lifestealer>();
         UI::updateEnemySection(*lifestealer);
 
-        Combat(player, *lifestealer, gen);
+        Combat(player, lifestealer, gen);
         lifestealer.reset();
 
         // After defeating Lifestealer
-        UI::addLogMessage("The Lifestealer dramatically clutches his chest: \e[32m'My business model... ruined!'\e[0m");
+        UI::addLogMessage("The Lifestealer dramatically clutches his chest...");
+        UI::addLogMessage("[ \e[33mEnter to continue\e[0m ]");
+        UI::Pause();
+        UI::addLogMessage("\e[35m\"My business model... ruined!\"\e[0m");
         UI::addLogMessage("[ \e[33mEnter to continue\e[0m ]");
         UI::Pause();
         UI::addLogMessage("He dissolves into black goo. Ew. At least he's biodegradable?");
@@ -234,13 +250,16 @@ int main()
         UI::addLogMessage("You sprint toward freedom, your flashlight bouncing with each step.");
         UI::addLogMessage("[ \e[33mEnter to continue\e[0m ]");
         UI::Pause();
-        UI::addLogMessage("Finally! You emerge into... wait... is this the same clearing you started in?");
+        UI::addLogMessage("Finally! You emerge into... wait...");
         UI::addLogMessage("[ \e[33mEnter to continue\e[0m ]");
         UI::Pause();
-        UI::addLogMessage("\e[1mYour memory is still foggy, but one thing is clear:\e[0m");
+        UI::addLogMessage("...is this the same clearing you started in?");
         UI::addLogMessage("[ \e[33mEnter to continue\e[0m ]");
         UI::Pause();
-        UI::addLogMessage("\e[1mYou're definitely not in Kansas anymore, " + player.getPlayerName() + ".\e[0m");
+        UI::addLogMessage("Your memory is still foggy, but one thing is clear:");
+        UI::addLogMessage("[ \e[33mEnter to continue\e[0m ]");
+        UI::Pause();
+        UI::addLogMessage("You're definitely not in Kansas anymore, " + player.getPlayerName() + ".");
         UI::addLogMessage("[ \e[33mEnter to continue\e[0m ]");
         UI::Pause();
 
@@ -257,7 +276,7 @@ int main()
         UI::addLogMessage("But then you notice your reflection in a nearby puddle...");
         UI::addLogMessage("[ \e[33mEnter to continue\e[0m ]");
         UI::Pause();
-        UI::addLogMessage("Your eyes... they're glowing with a faint green light.");
+        UI::addLogMessage("Your eyes... they're glowing with a \e[32mfaint green light\e[0m.");
         UI::addLogMessage("[ \e[33mEnter to continue\e[0m ]");
         UI::Pause();
         UI::addLogMessage("\e[32mWelcome to the family, " + player.getPlayerName() + "...\e[0m");
@@ -266,26 +285,26 @@ int main()
 
         // Final congratulations screen
         system("cls");
-        UI::gotoxy((UI::getScreenWidth() / 2) - 10, 8);
-        UI::printCentered("\e[33m╔══════════════════════════╗\e[0m");
-        UI::gotoxy((UI::getScreenWidth() / 2) - 10, 9);
-        UI::printCentered("\e[33m║                          ║\e[0m");
-        UI::gotoxy((UI::getScreenWidth() / 2) - 10, 10);
-        UI::printCentered("\e[33m║    C O N G R A T S !     ║\e[0m");
-        UI::gotoxy((UI::getScreenWidth() / 2) - 10, 11);
-        UI::printCentered("\e[33m║                          ║\e[0m");
-        UI::gotoxy((UI::getScreenWidth() / 2) - 10, 12);
-        UI::printCentered("\e[33m║   You survived... or     ║\e[0m");
-        UI::gotoxy((UI::getScreenWidth() / 2) - 10, 13);
-        UI::printCentered("\e[33m║     did you?             ║\e[0m");
-        UI::gotoxy((UI::getScreenWidth() / 2) - 10, 14);
-        UI::printCentered("\e[33m║                          ║\e[0m");
-        UI::gotoxy((UI::getScreenWidth() / 2) - 10, 15);
-        UI::printCentered("\e[33m║  Thanks for playing!     ║\e[0m");
-        UI::gotoxy((UI::getScreenWidth() / 2) - 10, 16);
-        UI::printCentered("\e[33m║                          ║\e[0m");
-        UI::gotoxy((UI::getScreenWidth() / 2) - 10, 17);
-        UI::printCentered("\e[33m╚══════════════════════════╝\e[0m");
+        UI::gotoxy(0, 8);
+        UI::printCentered("\e[33m+--------------------------+\e[0m");
+        UI::gotoxy(0, 9);
+        UI::printCentered("\e[33m|                          |\e[0m");
+        UI::gotoxy(0, 10);
+        UI::printCentered("\e[33m|    C O N G R A T S !     |\e[0m");
+        UI::gotoxy(0, 11);
+        UI::printCentered("\e[33m|                          |\e[0m");
+        UI::gotoxy(0, 12);
+        UI::printCentered("\e[33m|    You survived... or    |\e[0m");
+        UI::gotoxy(0, 13);
+        UI::printCentered("\e[33m|       did you?           |\e[0m");
+        UI::gotoxy(0, 14);
+        UI::printCentered("\e[33m|                          |\e[0m");
+        UI::gotoxy(0, 15);
+        UI::printCentered("\e[33m|   Thanks for playing!    |\e[0m");
+        UI::gotoxy(0, 16);
+        UI::printCentered("\e[33m|                          |\e[0m");
+        UI::gotoxy(0, 17);
+        UI::printCentered("\e[33m+--------------------------+\e[0m");
 
         cout << "\n\n\n";
         UI::printCentered("[ Press Enter to exit ]");
@@ -298,32 +317,51 @@ int main()
     }
 }
 
-void Combat(Player &player, Enemy &enemy, mt19937 &gen)
+void Combat(Player &player, unique_ptr<Enemy> &enemy, mt19937 &gen)
 {
     TurnState currentTurn = TurnState::ENEMY_TURN; // zaczynamy od tury przeciwnika
-    while (player.getHealthPoints() > 0 && enemy.getHealthPoints() > 0)
+    while (player.getHealthPoints() > 0 && enemy->getHealthPoints() > 0)
     {
         if (currentTurn == TurnState::PLAYER_TURN)
         {
-            player.startTurnActions();           // rzeczy do wykonania na poczatku tury np. skrocenie remainingDuration efektow
-            player.getPlayerChoice(enemy, gen);  // wybor akcji
-            currentTurn = TurnState::ENEMY_TURN; // po zakonczeniu tury przeruca na ture enemy
-        }
+            if (player.getHealthPoints() <= 0)
+                break;
 
+            player.getPlayerChoice(*enemy, gen); // wybor akcji
+            currentTurn = TurnState::ENEMY_TURN; // po zakonczeniu tury przeruca na ture enemy
+
+            // przejscie icepickera na faze 2
+            IcepickerPhase1 *icepicker = dynamic_cast<IcepickerPhase1 *>(enemy.get()); // dynamic cast downcastuje enemy na IcepickerPhase1 i zwraca wskaznik do niego, jak sie nie da to zwraca nullptr
+            if (icepicker != nullptr)
+            {
+                // zwraca icepickerPhase2 jesli ma ponizej 20 hp
+                if (icepicker->needsPhaseChange())
+                {
+                    enemy = icepicker->phaseChange();
+                    UI::updateEnemySection(*enemy);
+                }
+            }
+
+            currentTurn = TurnState::ENEMY_TURN;
+            player.endTurnActions(); // rzeczy do wykonania na poczatku tury np. skrocenie remainingDuration efektow
+        }
         else if (currentTurn == TurnState::ENEMY_TURN)
         {
-            enemy.startTurnActions();
-            enemy.attack(player, gen);            // enemy jedyne co robi to atakuje
+            if (enemy->getHealthPoints() <= 0)
+                break;
+
+            enemy->attack(player, gen);           // enemy jedyne co robi to atakuje
             currentTurn = TurnState::PLAYER_TURN; // po zakonczeniu przerzuca na ture enemy
+            enemy->endTurnActions();
         }
     }
     if (player.getHealthPoints() <= 0)
     {
         gameOver();
     }
-    else if (enemy.getHealthPoints() <= 0)
+    else if (enemy->getHealthPoints() <= 0)
     {
-        UI::addLogMessage(std::format("{} has been slain!", enemy.getClassName()));
+        UI::addLogMessage(std::format("{} has been slain!", enemy->getClassName()));
         UI::clearEnemyArea();
     }
 }
